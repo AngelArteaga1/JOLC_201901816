@@ -24,14 +24,17 @@ class Arreglo(Instruccion):
         if variable.tipo != Tipo.ARRAY:
             print("Error Semantico: la variable no es de tipo ARRAY, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: la variable no es de tipo ARRAY, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: la variable no es de tipo ARRAY", self.linea, self.columna))
             return Return(0, None)
         elif index.tipo != Tipo.INT:
             print("Error Semantico: el indice de la lista no es de tipo INT64, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el indice de la lista no es de tipo INT64, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el indice de la lista no es de tipo INT64", self.linea, self.columna))
             return Return(0, None)
         elif index.val > len(variable.val) or index.val < 0:
             print("Error Semantico: el indice '" + str(index.val) + "' de la lista no existe, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el indice '" + str(index.val) + "' de la lista no existe, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el indice '" + str(index.val) + "' de la lista no existe", self.linea, self.columna))
             return Return(0, None)
         if len(listita) <= 0:
             variable.val[index.val-1] = valor

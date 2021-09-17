@@ -15,6 +15,7 @@ class decStruct(Instruccion):
             linea: """ + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += """Error Semantico: el struct '""" + self.id + """' no existe, 
             linea: """ + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el struct '" + self.id + "' no existe", self.linea, self.columna))
             return
         atributos = {}
         for att in struct:

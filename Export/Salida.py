@@ -3,7 +3,9 @@ def init():
     global ast
     global graph
     global num
+    global errores
     salida = ""
     graph = ""
     num = 0
     ast = None
+    errores = []

@@ -15,16 +15,19 @@ class AccesoArray(Expresion):
         if not(valor.tipo == Tipo.ARRAY or valor.tipo == Tipo.STRING):
             print("Error Semantico: el valor no es te tipo ARRAY o STRING, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el valor no es te tipo ARRAY o STRING, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el valor no es te tipo ARRAY o STRING", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
         elif not(index.tipo == Tipo.INT or index.tipo == Tipo.RANGE):
             print("Error Semantico: el indice de la lista no es de tipo INT64 o RANGE, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el indice de la lista no es de tipo INT64 o RANGE, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el indice de la lista no es de tipo INT64 o RANGE", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
         #Aqui ya devolvemos el valor
         if index.tipo == Tipo.INT:
             if index.val > len(valor.val) or index.val < 0:
                 print("Error Semantico: el indice '" + str(index.val) + "' de la lista no existe, linea: " + str(self.linea) + " columna: " + str(self.columna))
                 Salida.salida += "Error Semantico: el indice '" + str(index.val) + "' de la lista no existe, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                Salida.errores.append(Error("Error Semantico: el indice '" + str(index.val) + "' de la lista no existe", self.linea, self.columna))
                 return Return("Nothing", Tipo.NOTHING)
             if valor.tipo == Tipo.ARRAY:
                 return Return(valor.val[index.val-1].val, valor.val[index.val-1].tipo)

@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+import json
 
 from Gramatica import grammar
 from Export import Salida
@@ -24,6 +25,7 @@ def home():
         except:
             print("Error al ejecutar instrucciones")
             Salida.salida += "Error al ejecutar instrucciones" + "\n"
+            Salida.errores.append(Error("Error al ejecutar instrucciones", 0, 0))
         
         return { 'msg': Salida.salida, 'code': 200 }
     except:
@@ -54,18 +56,39 @@ def graph():
     except:
         return { 'msg': 'ERROR', 'code': 500 }
 
+@app.route("/getErrors", methods=['GET'])
+def errors():
+    try:
+        Salida.init()
+        f = open("exec.txt", "r")
+        input = f.read()
+        
+        Salida.ast = grammar.parse(input)
+        
+        nuevoAmbito = Ambito(None)
+        Salida.ast = grammar.parse(input)
+        try:
+            for instr in Salida.ast:
+                instr.exec(nuevoAmbito)
+        except:
+            print("Error al ejecutar instrucciones")
+            Salida.salida += "Error al ejecutar instrucciones" + "\n"
+            Salida.errores.append(Error("Error al ejecutar instrucciones", 0, 0))
+        # Pasamos la lista a diccionario
+        listita = []
+        for i in Salida.errores:
+            obj = {}
+            obj["descripcion"] = i.descripcion
+            obj["linea"] = i.linea
+            obj["columna"] = i.columna
+            listita.append(obj)
+        return { 'msg': json.dumps(listita), 'code': 200 }
+    except:
+        return { 'msg': 'ERROR', 'code': 500 }
+
 @app.route("/", methods=['GET'])
 def home_view():
     return render_template('index.html')
-
-@app.route("/prueba", methods=['GET'])
-def home_prueba():
-    f = open("dotito.txt", "w")
-    f.write("pepe")
-    f.close()
-    f = open("./dotito.txt", "r")
-    input = f.read()
-    return input
 
 @app.route("/editor", methods=['GET'])
 def home_editor():
@@ -74,6 +97,10 @@ def home_editor():
 @app.route("/tree", methods=['GET'])
 def home_tree():
     return render_template('tree.html')
+
+@app.route("/errors", methods=['GET'])
+def home_errors():
+    return render_template('errors.html')
 
 if __name__ == '__main__':
     app.run()

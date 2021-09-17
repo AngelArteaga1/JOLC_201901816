@@ -201,6 +201,7 @@ def t_newline(t):
 def t_error(t):
     print("Error léxico, El caracter '%s'" % t.value[0] + " no es válido")
     Salida.salida += "Error léxico, El caracter '%s'" % t.value[0] + " no es válido" + "\n"
+    Salida.errores.append(Error("Error léxico, El caracter '%s'" % t.value[0] + " no es válido", 0, 0))
     t.lexer.skip(1)
 
 import ply.lex as lex
@@ -593,6 +594,7 @@ def p_error(t):
     Salida.salida += str(t) + "\n"
     print("Error sintáctico en '%s'" % t.value)
     Salida.salida += "Error sintáctico en '%s'" % t.value + "\n"
+    Salida.errores.append(Error("Error sintáctico en '%s'" % t.value, 0, 0))
 
 import ply.yacc as yacc
 parser = yacc.yacc()

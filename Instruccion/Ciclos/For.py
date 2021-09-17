@@ -50,6 +50,7 @@ class For(Instruccion):
         else:
             print("Error Semantico: el valor del for no es iterable porque es de tipo " + str(valor.tipo) + ", linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el valor del for no es iterable porque es de tipo " + str(valor.tipo) + ", linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el valor del for no es iterable porque es de tipo " + str(valor.tipo), self.linea, self.columna))
             return
 
     def graph(self, padre):

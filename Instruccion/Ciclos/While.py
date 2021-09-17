@@ -14,6 +14,7 @@ class While(Instruccion):
         if cond.tipo != Tipo.BOOLEAN:
             print("Error Semantico: la condicion del while no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: la condicion del while no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: la condicion del while no es de tipo BOOL", self.linea, self.columna))
             return
         nuevoAmbito = Ambito(ambito)
         while cond.val:
@@ -29,6 +30,7 @@ class While(Instruccion):
             if cond.tipo != Tipo.BOOLEAN:
                 print("Error Semantico: la condicion del while no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna))
                 Salida.salida += "Error Semantico: la condicion del while no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                Salida.errores.append(Error("Error Semantico: la condicion del while no es de tipo BOOL", self.linea, self.columna))
                 return
 
     def graph(self, padre):

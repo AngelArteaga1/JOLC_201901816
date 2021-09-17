@@ -26,10 +26,12 @@ class Declaracion(Instruccion):
                         ambito.guardarVarStruct(self.id, valor.val, valor.auxTipo)
                     else:
                         Salida.salida += "Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.auxTipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                        Salida.errores.append(Error("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.auxTipo) + "' y  no de tipo '" + str(self.tipo) + "'", self.linea, self.columna))
                         print("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.auxTipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                 else:
                     print("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                     Salida.salida += "Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                    Salida.errores.append(Error("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "'", self.linea, self.columna))
         else:
             if self.tipoDeclaracion == TipoDeclaracion.DEFAULT:
                 if self.tipo == None:
@@ -38,11 +40,13 @@ class Declaracion(Instruccion):
                     if isinstance(self.tipo, str):
                         print("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                         Salida.salida += "Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                        Salida.errores.append(Error("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "'", self.linea, self.columna))
                     elif self.tipo == valor.tipo:
                         ambito.guardarVar(self.id, valor.val, valor.tipo)
                     else:
                         print("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                         Salida.salida += "Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                        Salida.errores.append(Error("Error Semantico: la variable '" + self.id + "' es de tipo '" + str(valor.tipo) + "' y  no de tipo '" + str(self.tipo) + "'", self.linea, self.columna))
             elif self.tipoDeclaracion == TipoDeclaracion.LOCAL:
                 ambito.guardarVarLocal(self.id, valor.val, valor.tipo)
             else:

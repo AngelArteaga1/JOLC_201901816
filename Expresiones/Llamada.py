@@ -22,6 +22,7 @@ class Llamada(Expresion):
                 if len(funcion.parametros) != len(self.parametros):
                     print("Error Semantico: la llamada a la funcion '" + str(self.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(self.linea) + " columna: " + str(self.columna))
                     Salida.salida += "Error Semantico: la llamada a la funcion '" + str(self.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                    Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(self.id) + "' no tiene la cantidad de parametros correctos", self.linea, self.columna))
                     return Return("Nothing", Tipo.NOTHING)
                 #Ahora verificamos si los parametros son como sus tipos
                 if funcion.parametros[i].tipo != None:
@@ -29,11 +30,13 @@ class Llamada(Expresion):
                         if funcion.parametros[i].tipo != parametro.auxTipo:
                             print("Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                             Salida.salida += "Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                            Salida.errores.append(Error("Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "'", self.linea, self.columna))
                             return Return("Nothing", Tipo.NOTHING)
                     else:
                         if funcion.parametros[i].tipo != parametro.tipo:
                             print("Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                             Salida.salida += "Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                            Salida.errores.append(Error("Error Semantico: el parametro no es de tipo '" + str(funcion.parametros[i].tipo) + "'", self.linea, self.columna))
                             return Return("Nothing", Tipo.NOTHING)
                 #verificamos si es una struct
                 if parametro.tipo == Tipo.STRUCT:
@@ -95,6 +98,7 @@ class Llamada(Expresion):
                         else:
                             print("Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                             Salida.salida += "Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                            Salida.errores.append(Error("Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "'", self.linea, self.columna))
                             atributos.update({
                                 struct[i] : Return("Nothing", Tipo.NOTHING)
                             })
@@ -106,6 +110,7 @@ class Llamada(Expresion):
                         else:
                             print("Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                             Salida.salida += "Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n" 
+                            Salida.errores.append(Error("Error Semantico: el atributo " + str(i+1) + " de '" + str(self.id) + "' es de tipo '" + str(valor.tipo) + "' y no de tipo '" + str(tipoStruct[i]) + "'", self.linea, self.columna))
                             atributos.update({
                                 struct[i] : Return("Nothing", Tipo.NOTHING)
                             })
@@ -116,6 +121,7 @@ class Llamada(Expresion):
             return Return(atributos, Tipo.STRUCT, self.id)
         print("Error Semantico: no existe la funcion o el struct '" + str(self.id) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
         Salida.salida += "Error Semantico: no existe la funcion o el struct '" + str(self.id) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: no existe la funcion o el struct '" + str(self.id) + "'", self.linea, self.columna))
         return Return("Nothing", Tipo.NOTHING)
 
     def graph(self, padre):

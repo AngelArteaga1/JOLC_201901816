@@ -14,6 +14,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna)
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpAritmetico.MINUS:
         if rightType == Tipo.INT and leftType == Tipo.INT:
@@ -27,6 +28,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpAritmetico.TIMES:
         if rightType == Tipo.INT and leftType == Tipo.INT:
@@ -42,6 +44,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpAritmetico.DIV:
         if rightType == Tipo.INT and leftType == Tipo.INT:
@@ -55,6 +58,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpAritmetico.POW:
         if rightType == Tipo.INT and leftType == Tipo.INT:
@@ -70,6 +74,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpAritmetico.MOD:
         if rightType == Tipo.INT and leftType == Tipo.INT:
@@ -83,6 +88,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpRelacional.GREATER:
         if leftType == Tipo.INT and rightType == Tipo.FLOAT:
@@ -98,6 +104,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpRelacional.LESS:
         if leftType == Tipo.INT and rightType == Tipo.FLOAT:
@@ -113,6 +120,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpRelacional.GREATEREQUAL:
         if leftType == Tipo.INT and rightType == Tipo.FLOAT:
@@ -128,6 +136,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpRelacional.LESSEQUAL:
         if leftType == Tipo.INT and rightType == Tipo.FLOAT:
@@ -143,6 +152,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         else:
             print("Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
     elif Operador == OpRelacional.EQUALSEQUALS:
         return Tipo.BOOLEAN

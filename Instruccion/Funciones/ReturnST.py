@@ -15,6 +15,7 @@ class ReturnST(Expresion):
         except:
             print("Error en Return")
             Salida.salida += "Error en Return, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error en Return", self.linea, self.columna))
 
     def graph(self, padre):
         nombreLit = "Nodo" + str(Salida.num)

@@ -14,6 +14,7 @@ class AccesoStruct(Expresion):
         if var.tipo != Tipo.STRUCT:
             print("Error Semantico: el valor no es de tipo struct, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el valor no es de tipo struct, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el valor no es de tipo struct", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
         #Verificamos si existe el parametro
         if self.atributo in var.val:
@@ -22,6 +23,7 @@ class AccesoStruct(Expresion):
         else:
             print("Error Semantico: no existe el atributo '" + str(self.atributo) + "' del struct '" + str(var.auxTipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: no existe el atributo '" + str(self.atributo) + "' del struct '" + str(var.auxTipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: no existe el atributo '" + str(self.atributo) + "' del struct '" + str(var.auxTipo) + "'", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
 
     def graph(self, padre):

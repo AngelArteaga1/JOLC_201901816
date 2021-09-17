@@ -15,15 +15,11 @@ class Aritmetica(Expresion):
         valLeft = self.left.exec(ambito)
         valRight = self.right.exec(ambito)
 
-        #Si hubo algun error antes
-        if valLeft.tipo == None or valRight.tipo == None:
-            return Return(0, None)
-
         resultado = Return(0, Tipo.INT)
 
         #Obtenemos el tipo del resultado y si hubo algun error retornamos
         resultado.tipo = getTipo(valLeft.tipo, valRight.tipo, self.tipo, self.linea, self.columna)
-        if resultado.tipo == None:
+        if resultado.tipo == Tipo.NOTHING:
             return resultado
         
         if self.tipo == OpAritmetico.PLUS:

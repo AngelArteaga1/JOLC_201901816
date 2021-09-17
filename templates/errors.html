@@ -10,8 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/icons.min.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 <body>
-
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
   
     <div id="wrapper">
         <div class="overlay"></div>
@@ -29,7 +27,7 @@
                     <div class="dropdown-header2">／人◕ ‿‿ ◕人＼</div>
                     <li><a href="#"> Árbol de Análisis Sintáctico</a></li>
                     <li><a href="#"> Tabla de Símbolos</a></li>
-                    <li><a href="/errors"> Tabla de Errores</a></li>
+                    <li><a href="#"> Tabla de Errores</a></li>
                 </ul>
                 </li>
                 <li><a href="https://github.com/AngelArteaga1"><i class="uil-github-alt "></i> Contact</a></li>
@@ -63,10 +61,24 @@
         </button>
 
         <!--AQUI VA EL CONTENIDO DEL ARBOL-->
-        <div class="container">
-          <h1 style="font-family: 'Merriweather', serif;">Árbol de Analisis Sintáctico</h1>     
+        <div class="container" style="height:600px;">
+            <h1 style="font-family: 'Merriweather', serif;">Tabla de Errores</h1>
+            <br>
+            <div style="height:500px;" class="overflow-auto">
+                <table class="table table-hover table-dark">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Linea</th>
+                        <th scope="col">Columna</th>
+                        <th scope="col">Fecha y Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoErrores"></tbody>
+                </table>
+            </div>
         </div>
-        <div id="mynetwork" class="col-12" style="height:600px;"></div>   
         <!-- /#TERMINA CONTENIDO DEL ARBOL-->
 
     </div>
@@ -138,49 +150,55 @@
 <script src="{{ url_for('static', filename='scripts/index.js') }}" type="text/javascript" charset="utf-8"></script>
 <script>
 
-    graficar();
+    initTablita();
 
-    async function graficar(){
-        getDot().then(val => setVis(val))
+    async function initTablita(){
+        getErrors().then(val => setTable(val))
     }
-    function setVis(DOTstring){
-            // create a network
-            var container = document.getElementById("mynetwork");
-            var parsedData = vis.parseDOTNetwork(DOTstring);
-            var data = {
-            nodes: parsedData.nodes,
-            edges: parsedData.edges
-            }
-            var options = {
-                nodes: {shape: "star"},
-                edges: {color:"#17202A"},
-                layout: {
-                        hierarchical: {
-                            levelSeparation: 100,
-                            nodeSpacing: 100,
-                            parentCentralization: true,
-                            direction: 'UD',        // UD, DU, LR, RL
-                            sortMethod: 'directed',  // hubsize, directed
-                            shakeTowards: 'roots'  // roots, leaves                        
-                    },
-                },                        
-            };
-            var network = new vis.Network(container, data, options);
+    function setTable(Errores){
+        let fecha = new Date();
+        let cuerpoErrores = document.getElementById("cuerpoErrores");
+        for(let i = 0; i < Errores.length; i++){
+            let TR = document.createElement("tr");
+            //Crear cada celda
+            let iteracion = document.createElement("th");
+            iteracion.appendChild(document.createTextNode(i));
+            iteracion.setAttribute("scope", "row");
+            TR.appendChild(iteracion)
+
+            let descripcion = document.createElement("td");
+            descripcion.appendChild(document.createTextNode(Errores[i].descripcion));
+            TR.appendChild(descripcion)
+
+            let linea = document.createElement("td");
+            linea.appendChild(document.createTextNode(Errores[i].linea));
+            TR.appendChild(linea)
+
+            let columna = document.createElement("td");
+            columna.appendChild(document.createTextNode(Errores[i].columna));
+            TR.appendChild(columna)
+
+            let date = document.createElement("td");
+            date.appendChild(document.createTextNode(fecha.getDay() + '/' + fecha.getMonth() + '/' + fecha.getFullYear() + ', ' + fecha.getHours() + ':' + fecha.getMinutes()));
+            TR.appendChild(date)
+            //Ahora a insertar el TR al cuerpoErrores
+            cuerpoErrores.appendChild(TR)
+        }
     }
 
-    async function getDot(){
-        let DOTstring = "";
+    async function getErrors(){
+        let Errores = [];
         await $.ajax({
             type: 'GET',
-            url: '/graph',
+            url: '/getErrors',
             success: function(data){
-                DOTstring = data.msg;
-                console.log(DOTstring);
+                Errores = JSON.parse(data.msg);
+                console.log(Errores);
             },
             contentType: 'application/json',
             dataType: 'json'
         });
-        return DOTstring;
+        return Errores;
     }
 </script>
 </body>

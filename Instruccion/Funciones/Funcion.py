@@ -14,6 +14,7 @@ class Funcion(Instruccion):
         except:
             print("Error al guardar funcion")
             Salida.salida += "Error al guardar funcion, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error al guardar funcion", self.linea, self.columna))
 
     def graph(self, padre):
         nombreLit = "Nodo" + str(Salida.num)

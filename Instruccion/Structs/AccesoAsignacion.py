@@ -20,6 +20,7 @@ class AccesoAsignacion(Instruccion):
         if inmutable:
             print("Error Semantico: el struct '" + nombreStruct+ "' no es mutable, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: el struct '" + nombreStruct+ "' no es mutable, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el struct '" + nombreStruct+ "' no es mutable", self.linea, self.columna))
             return
         #Verificamos si el valor del parametro tiene el tipo correcto
         atributos = ambito.getStruct(nombreStruct)
@@ -29,6 +30,7 @@ class AccesoAsignacion(Instruccion):
                 if tipoAtributos[i] != None and valor.tipo != tipoAtributos[i]:
                     print("Error Semantico: el atributo '" + self.acceso.atributo + "' no es de tipo '" + str(tipoAtributos[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
                     Salida.salida += "Error Semantico: el atributo '" + self.acceso.atributo + "' no es de tipo '" + str(tipoAtributos[i]) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+                    Salida.errores.append(Error("Error Semantico: el atributo '" + self.acceso.atributo + "' no es de tipo '" + str(tipoAtributos[i]) + "'", self.linea, self.columna))
                     return
         ente.auxTipo = valor.auxTipo
         ente.tipo = valor.tipo

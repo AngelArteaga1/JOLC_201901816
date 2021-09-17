@@ -10,15 +10,18 @@ def log10(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     if valor.val <= 0:
         print("Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser negativo o nulo, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser negativo o nulo, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el parametro de la funcion '" + str(funcion.id) + "' no puede ser negativo o nulo", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.log10(valor.val), Tipo.FLOAT)
 
@@ -26,16 +29,19 @@ def log(funcion, ambito):
     if len(funcion.parametros) != 2:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     base = funcion.parametros[0].exec(ambito)
     valor = funcion.parametros[1].exec(ambito)
     if not(base.tipo == Tipo.INT or base.tipo == Tipo.FLOAT):
         print("Error Semantico: la base de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la base de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la base de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(base.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.log(valor.val, base.val), Tipo.FLOAT)
 
@@ -43,11 +49,13 @@ def sin(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.sin(valor.val), Tipo.FLOAT)
 
@@ -55,11 +63,13 @@ def cos(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.cos(valor.val), Tipo.FLOAT)
 
@@ -67,11 +77,13 @@ def tan(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.tan(valor.val), Tipo.FLOAT)
 
@@ -79,15 +91,18 @@ def sqrt(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.INT or valor.tipo == Tipo.FLOAT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return(0, Tipo.NOTHING)
     elif valor.val < 0:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser negativo', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser negativo', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser negativo'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.sqrt(valor.val), Tipo.FLOAT)
 
@@ -95,12 +110,14 @@ def parse(funcion, ambito):
     if len(funcion.parametros) != 2:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     tipo = funcion.parametros[0]
     valor = funcion.parametros[1].exec(ambito)
     if valor.tipo != Tipo.STRING:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     try:
         if tipo == Tipo.INT:
@@ -110,10 +127,12 @@ def parse(funcion, ambito):
         else:
             print("Error Semantico: el tipo de la funcion '" + str(funcion.id) + "' no es un tipo numerico, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
             Salida.salida += "Error Semantico: el tipo de la funcion '" + str(funcion.id) + "' no es un tipo numerico, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el tipo de la funcion '" + str(funcion.id) + "' no es un tipo numerico", funcion.linea, funcion.columna))
             return Return("Nothing", Tipo.NOTHING)
     except:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede se puede convertir a " + str(tipo) + ", linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede se puede convertir a " + str(tipo) + ", linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede se puede convertir a " + str(tipo), funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
 
 
@@ -121,11 +140,13 @@ def trunc(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.FLOAT or valor.tipo == Tipo.INT):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(math.trunc(valor.val), Tipo.INT)
 
@@ -133,11 +154,13 @@ def Float(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if valor.tipo != Tipo.INT:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(float(valor.val), Tipo.FLOAT)
 
@@ -145,6 +168,7 @@ def string(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if valor.tipo == Tipo.ARRAY:
@@ -176,6 +200,7 @@ def typeof(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if valor.tipo == Tipo.INT:
@@ -199,12 +224,14 @@ def push(funcion, ambito):
     if len(funcion.parametros) != 2:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     array = funcion.parametros[0].exec(ambito)
     valor = funcion.parametros[1].exec(ambito)
     if array.tipo != Tipo.ARRAY:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     array.val.append(valor)
     return Return(array.val, Tipo.ARRAY)
@@ -213,11 +240,13 @@ def Pop(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     array = funcion.parametros[0].exec(ambito)
     if array.tipo != Tipo.ARRAY:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(array.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = array.val.pop()
     return Return(valor.val, valor.tipo)
@@ -226,11 +255,13 @@ def length(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if not(valor.tipo == Tipo.STRING or valor.tipo == Tipo.ARRAY):
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(len(valor.val), Tipo.INT)
 
@@ -238,11 +269,13 @@ def uppercase(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if valor.tipo != Tipo.STRING:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return(0, Tipo.NOTHING)
     return Return(valor.val.upper(), Tipo.STRING)
 
@@ -250,10 +283,12 @@ def lowercase(funcion, ambito):
     if len(funcion.parametros) != 1:
         print("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos, linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: la llamada a la funcion '" + str(funcion.id) + "' no tiene la cantidad de parametros correctos", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     valor = funcion.parametros[0].exec(ambito)
     if valor.tipo != Tipo.STRING:
         print("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna))
         Salida.salida += "Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "', linea: " + str(funcion.linea) + " columna: " + str(funcion.columna) + "\n"
+        Salida.errores.append(Error("Error Semantico: el valor de la funcion '" + str(funcion.id) + "' no puede ser de tipo '" + str(valor.tipo) + "'", funcion.linea, funcion.columna))
         return Return("Nothing", Tipo.NOTHING)
     return Return(valor.val.lower(), Tipo.STRING)

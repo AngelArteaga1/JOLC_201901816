@@ -53,6 +53,7 @@ class Ambito:
         if id in self.funciones.keys():
             print("Error Semantico: la funcion '" + id + "' ya existe, linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: la funcion '" + id + "' ya existe, linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: la funcion '" + id + "' ya existe", self.linea, self.columna))
         else:
             self.funciones[id] = funcion
 
@@ -71,6 +72,7 @@ class Ambito:
         if id in self.structs.keys():
             print("Error Semantico: el struct '" + id + "' ya existe, linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: el struct '" + id + "' ya existe, linea: " + str(linea) + " columna: " + str(columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: el struct '" + id + "' ya existe", self.linea, self.columna))
         else:
             self.structs[id] = atributo
             self.tipoStructs[id] = tipoAtributo

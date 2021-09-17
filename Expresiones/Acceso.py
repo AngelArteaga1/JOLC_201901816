@@ -13,6 +13,7 @@ class Acceso(Expresion):
         if valor == None:
             print("Error Semantico: la variable '" + str(self.id) + "' no existe, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: la variable '" + str(self.id) + "' no existe, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: la variable '" + str(self.id) + "' no existe", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
         elif valor.tipo == Tipo.STRUCT:
             return Return(valor.atributos, valor.tipo, valor.objeto)

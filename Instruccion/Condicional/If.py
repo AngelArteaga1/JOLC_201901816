@@ -15,6 +15,7 @@ class If(Instruccion):
         if cond.tipo != Tipo.BOOLEAN:
             print("Error Semantico: la condicion del if no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: la condicion del if no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: la condicion del if no es de tipo BOOL", self.linea, self.columna))
             return
         if cond.val:
             return self.instrucciones.exec(ambito)

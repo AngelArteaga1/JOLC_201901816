@@ -46,6 +46,12 @@ class TipoDeclaracion(Enum):
     LOCAL = 1
     GLOBAL = 2
 
+class Error:
+    def __init__(self, descripcion, linea, columna):
+        self.descripcion = descripcion
+        self.linea = linea
+        self.columna = columna
+
 class Return:
     def __init__(self, val, tipo, auxTipo = ""):
         self.val = val

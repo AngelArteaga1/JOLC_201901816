@@ -13,15 +13,12 @@ class Logica(Expresion):
     def exec(self, ambito):
         valLeft = self.left.exec(ambito)
         valRight = self.right.exec(ambito)
-        
-        #Si hubo algun error antes
-        if valLeft.tipo == None or valRight.tipo == None:
-            return Return(0, None)
 
         #Verificamos si ambos tipos son booleanos
         if valLeft.tipo != Tipo.BOOLEAN or valRight.tipo != Tipo.BOOLEAN:
             print("Error Semantico: No es posible realizar la operacion logica entre '" + str(valLeft.tipo) + "' y '" + str(valRight.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna))
             Salida.salida += "Error Semantico: No es posible realizar la operacion logica entre '" + str(valLeft.tipo) + "' y '" + str(valRight.tipo) + "', linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
+            Salida.errores.append(Error("Error Semantico: No es posible realizar la operacion logica entre '" + str(valLeft.tipo) + "' y '" + str(valRight.tipo) + "'", self.linea, self.columna))
             return Return("Nothing", Tipo.NOTHING)
 
         resultado = Return(False, Tipo.BOOLEAN)
