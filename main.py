@@ -3,7 +3,7 @@ from Simbolo.Ambito import *
 from Export import Salida
 
 Salida.init()
-ambitoGlobal = Ambito(None)
+ambitoGlobal = Ambito(None, "Global")
 f = open("./input.jl", "r")
 input = f.read()
 Salida.ast = parse(input)

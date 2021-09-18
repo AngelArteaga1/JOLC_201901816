@@ -22,7 +22,7 @@ class decStruct(Instruccion):
             atributos.update({
                 att: 0
             })
-        ambito.guardarVarStruct(self.id, atributos, self.tipo)
+        ambito.guardarVarStruct(self.id, atributos, self.tipo, self.linea, self.columna)
 
     def graph(self, padre):
         return ""

@@ -14,7 +14,7 @@ class Llamada(Expresion):
     def exec(self, ambito):
         funcion = ambito.getFunc(self.id)
         if funcion != None:
-            nuevoAmbito = Ambito(ambito.getGlobal())
+            nuevoAmbito = Ambito(ambito.getGlobal(), self.id)
             nuevoAmbito.funcion = True
             for i in range(len(self.parametros)):
                 parametro = self.parametros[i].exec(ambito)
@@ -40,9 +40,9 @@ class Llamada(Expresion):
                             return Return("Nothing", Tipo.NOTHING)
                 #verificamos si es una struct
                 if parametro.tipo == Tipo.STRUCT:
-                    nuevoAmbito.guardarVarStruct(funcion.parametros[i].id, parametro.val, parametro.auxTipo)
+                    nuevoAmbito.guardarVarStruct(funcion.parametros[i].id, parametro.val, parametro.auxTipo, self.linea, self.columna)
                 else:
-                    nuevoAmbito.guardarVar(funcion.parametros[i].id, parametro.val, parametro.tipo)
+                    nuevoAmbito.guardarVar(funcion.parametros[i].id, parametro.val, parametro.tipo, self.linea, self.columna)
             funcion.instrucciones.funcion = True
             returnST = funcion.instrucciones.exec(nuevoAmbito)
             if returnST != None:

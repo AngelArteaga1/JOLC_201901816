@@ -16,7 +16,7 @@ class While(Instruccion):
             Salida.salida += "Error Semantico: la condicion del while no es de tipo BOOL, linea: " + str(self.linea) + " columna: " + str(self.columna) + "\n"
             Salida.errores.append(Error("Error Semantico: la condicion del while no es de tipo BOOL", self.linea, self.columna))
             return
-        nuevoAmbito = Ambito(ambito)
+        nuevoAmbito = Ambito(ambito, "For")
         while cond.val:
             item = self.instrucciones.exec(nuevoAmbito)
             if item != None:

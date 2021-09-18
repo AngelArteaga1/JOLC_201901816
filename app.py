@@ -17,7 +17,7 @@ def home():
         f.write(input)
         f.close()
         
-        nuevoAmbito = Ambito(None)
+        nuevoAmbito = Ambito(None, "Global")
         Salida.ast = grammar.parse(input)
         try:
             for instr in Salida.ast:
@@ -65,7 +65,7 @@ def errors():
         
         Salida.ast = grammar.parse(input)
         
-        nuevoAmbito = Ambito(None)
+        nuevoAmbito = Ambito(None, "Global")
         Salida.ast = grammar.parse(input)
         try:
             for instr in Salida.ast:

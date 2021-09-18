@@ -9,3 +9,6 @@ class Simbolo:
         # Structs
         self.objeto = simboloOBJ
         self.atributos = {}
+        self.nombreAmbito = ""
+        self.linea = 0
+        self.columa = 0

@@ -12,11 +12,11 @@ class For(Instruccion):
     
     def exec(self, ambito):
         valor = self.expresion.exec(ambito)
-        nuevoAmbito = Ambito(ambito)
+        nuevoAmbito = Ambito(ambito, "For")
         if valor.tipo == Tipo.RANGE:
             rango = range(valor.val.minimo.val, valor.val.maximo.val+1)
             for i in rango:
-                nuevoAmbito.guardarVar(self.id, i, Tipo.INT)
+                nuevoAmbito.guardarVar(self.id, i, Tipo.INT, self.linea, self.columna)
                 item = self.instrucciones.exec(nuevoAmbito)
                 if item != None:
                     if item.tipo == Tipo.BREAKST:
@@ -27,7 +27,7 @@ class For(Instruccion):
                         return item
         elif valor.tipo == Tipo.ARRAY:
             for i in valor.val:
-                nuevoAmbito.guardarVar(self.id, i.val, i.tipo)
+                nuevoAmbito.guardarVar(self.id, i.val, i.tipo, self.linea, self.columna)
                 item = self.instrucciones.exec(nuevoAmbito)
                 if item != None:
                     if item.tipo == Tipo.BREAKST:
@@ -38,7 +38,7 @@ class For(Instruccion):
                         return item
         elif valor.tipo == Tipo.STRING:
             for i in valor.val:
-                nuevoAmbito.guardarVar(self.id, i, Tipo.STRING)
+                nuevoAmbito.guardarVar(self.id, i, Tipo.STRING, self.linea, self.columna)
                 item = self.instrucciones.exec(nuevoAmbito)
                 if item != None:
                     if item.tipo == Tipo.BREAKST:
