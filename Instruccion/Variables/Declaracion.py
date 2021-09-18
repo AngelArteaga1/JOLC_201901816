@@ -75,7 +75,8 @@ class Declaracion(Instruccion):
         Salida.graph += nombreigual + '[label="="];\n'
         Salida.graph += nombreLit + '->' + nombreigual + ';\n'
         Salida.num += 1
-        self.val.graph(nombreLit)
+        if self.val != None:
+            self.val.graph(nombreLit)
         if self.tipo != None:
             nombreTipo = "Nodo" + str(Salida.num)
             Salida.graph += nombreTipo + '[label=":' + str(self.tipo) + '"];\n'

@@ -26,6 +26,11 @@ class Literal(Expresion):
             Salida.num += 1
             for valor in self.val:
                 valor.graph(nombreLista)
+        elif self.tipo == Tipo.STRING or self.tipo == Tipo.CHAR:
+            nombreLit = "Nodo" + str(Salida.num)
+            Salida.graph += nombreLit + '[label="\'' + str(self.val) + '\'"];\n'
+            Salida.graph += padre + '->' + nombreLit + ';\n'
+            Salida.num += 1
         else:
             nombreLit = "Nodo" + str(Salida.num)
             Salida.graph += nombreLit + '[label="' + str(self.val) + '"];\n'

@@ -139,4 +139,10 @@ class Llamada(Expresion):
             Salida.graph += nombreLit + '->' + nombreLista + ';\n'
             Salida.num += 1
             for param in self.parametros:
-                param.graph(nombreLista)
+                if isinstance(param, Tipo):
+                    nombreTipo = "Nodo" + str(Salida.num)
+                    Salida.graph += nombreTipo + '[label="' + str(param) + '"];\n'
+                    Salida.graph += nombreLista + '->' + nombreTipo + ';\n'
+                    Salida.num += 1
+                else:
+                    param.graph(nombreLista)

@@ -86,6 +86,39 @@ def errors():
     except:
         return { 'msg': 'ERROR', 'code': 500 }
 
+@app.route("/getSimbols", methods=['GET'])
+def simbols():
+    try:
+        Salida.init()
+        f = open("exec.txt", "r")
+        input = f.read()
+        
+        Salida.ast = grammar.parse(input)
+        
+        nuevoAmbito = Ambito(None, "Global")
+        Salida.ast = grammar.parse(input)
+        try:
+            for instr in Salida.ast:
+                instr.exec(nuevoAmbito)
+        except:
+            print("Error al ejecutar instrucciones")
+            Salida.salida += "Error al ejecutar instrucciones" + "\n"
+            Salida.errores.append(Error("Error al ejecutar instrucciones", 0, 0))
+        # Pasamos la lista a diccionario
+        listita = []
+        for i in Salida.simbolos:
+            obj = {}
+            obj["nombre"] = str(i.id)
+            obj["tipo"] = str(i.tipo)
+            obj["ambito"] = str(i.nombreAmbito)
+            obj["linea"] = i.linea
+            obj["columna"] = i.columa
+            listita.append(obj)
+        print(listita)
+        return { 'msg': json.dumps(listita), 'code': 200 }
+    except:
+        return { 'msg': 'ERROR', 'code': 500 }
+
 @app.route("/", methods=['GET'])
 def home_view():
     return render_template('index.html')
@@ -101,6 +134,10 @@ def home_tree():
 @app.route("/errors", methods=['GET'])
 def home_errors():
     return render_template('errors.html')
+
+@app.route("/simbols", methods=['GET'])
+def home_simbols():
+    return render_template('simbols.html')
 
 if __name__ == '__main__':
     app.run()

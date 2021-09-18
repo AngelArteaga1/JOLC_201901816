@@ -1,33 +1,119 @@
-function ackerman(m::Int64, n::Int64)
-    if m == 0
-        return n + 1;
-    elseif m > 0 && n == 0
-        return ackerman(m - 1, 1);
-    else
-        return ackerman(m - 1, ackerman(m, n - 1));
+random = [1, 5, 8, -1, 21, 42, -55, 123, -5, 5, 11];
+
+a = [
+    [
+        random[1] * 3,
+        51,
+        random[4] / 2,
+        (random[3] * 10) % 7
+    ], 
+    [
+        1,
+        2,
+        3,
+        4
+    ]
+];
+
+b = [
+    [
+        1,
+        2,
+        3,
+        4   
+    ], 
+    [
+        random[1] * 3,
+        51,
+        random[4] / 2,
+        (random[3] * 10) % 7
+    ]
+];
+
+auxiliar = [
+    [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+    ], 
+    [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+    ]
+];
+
+
+# Si no tienen implementado este for, pueden cambiarlo por algún otro ciclo que funcione parecido.
+function printMatriz(matrix)
+    println("[");
+    for i in matrix
+        print("[");
+        for j in i
+            print(j, " ");
+        end;
+        println("]");
     end;
+    println("]");
 end;
 
-function hanoi(discos, origen, auxiliar, destino)
-    if discos == 1
-        println("Mover de ", origen, " a ", destino);
-    else
-        hanoi(discos - 1, origen, destino, auxiliar);
-        println("Mover de ", origen, " a ", destino);
-        hanoi(discos - 1, auxiliar, origen, destino);
+function sumarMatrices(matrix1, matrix2)
+    global auxiliar;
+    if length(matrix1) != length(matrix2)
+        return "NO SE PUEDEN SUMAR. NO SON DE LA MISMA LONGITUD";
     end;
+
+    
+    for i in 1:length(matrix1)
+        for j in 1:length(matrix1[1])
+            auxiliar[i][j] = matrix1[i][j] + matrix2[i][j];
+        end;
+    end;
+    return auxiliar;
 end;
 
-function factorial(num::Int64)
-    if num == 1
-        return 1;
-    else
-        return num * factorial(num - 1);
+function compararMatrices(matrix1, matrix2)
+    if length(matrix1) != length(matrix2)
+        return false;
     end;
+
+    
+    for i in 1:length(matrix1)
+        for j in 1:length(matrix1[1])
+            if matrix1[i][j] != matrix2[i][j]
+                return false;
+            end;
+        end;
+    end;
+    return true;
 end;
 
-println(factorial(5));
+println("MATRIZ a");
+printMatriz(a);
+println();
+println("MATRIZ b");
+printMatriz(b);
 
-println(ackerman(2, 4));
+println();
+println("LAS DOS MATRICES SUMADAS");
+println(sumarMatrices(a, b));
 
-hanoi(3, 1, 2, 3);
+println();
+println("COMPARAR MATRICES. SON IGUALES?");
+println(compararMatrices(a, b));
+
+println();
+println("Pop Matriz a");
+println(pop!(a));
+
+println();
+println("Push a b");
+push!(b, [3010.1999]);
+printMatriz(b);
+
+b = a;
+println();
+println("COMPARAR MATRICES. SON IGUALES?");
+println(compararMatrices(a, b));

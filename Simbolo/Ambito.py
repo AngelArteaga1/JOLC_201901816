@@ -33,6 +33,7 @@ class Ambito:
             if id in env.variables.keys():
                 env.variables[id] = nuevoSimbolo
             else:
+                Salida.simbolos.append(nuevoSimbolo)
                 self.variables[id] = nuevoSimbolo
         else:
             while env != None:

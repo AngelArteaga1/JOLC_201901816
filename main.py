@@ -8,14 +8,25 @@ f = open("./input.jl", "r")
 input = f.read()
 Salida.ast = parse(input)
 
-for instr in Salida.ast:
+'''for instr in Salida.ast:
     returnST = instr.exec(ambitoGlobal)
     if returnST != None:
         if returnST.tipo == Tipo.RETURNST:
             print("""Error Semantico: el return esta afuera de una funcion, 
             linea: """ + str(instr.linea) + " columna: " + str(instr.columna))
 
-'''#Vamos a graficar el inicio
+listita = []
+for i in Salida.simbolos:
+    obj = {}
+    obj["nombre"] = str(i.id)
+    obj["tipo"] = str(i.tipo)
+    obj["ambito"] = str(i.nombreAmbito)
+    obj["linea"] = i.linea
+    obj["columna"] = i.columa
+    listita.append(obj)
+print(listita)'''
+
+#Vamos a graficar el inicio
 Salida.graph += "digraph G\n{\n"
 Salida.graph += 'node[shape="box"];\n'
 nombrePadre = "Nodo" + str(Salida.num)
@@ -27,4 +38,4 @@ Salida.graph += "}"
 
 f = open("dotito.txt", "w")
 f.write(Salida.graph)
-f.close()'''
+f.close()
