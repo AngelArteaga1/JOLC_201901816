@@ -184,6 +184,9 @@ def arrayToString(valor):
         if item.tipo == Tipo.ARRAY:
             array.append(arrayToString(item))
             continue
+        elif item.tipo == Tipo.STRUCT:
+            array.append(structToString(item))
+            continue
         array.append(item.val)
     return array
 
@@ -192,6 +195,9 @@ def structToString(valor):
     for item in valor.val:
         if valor.val[item].tipo == Tipo.STRUCT:
             struct[item] = structToString(valor.val[item])
+            continue
+        elif valor.val[item].tipo == Tipo.ARRAY:
+            struct[item] = arrayToString(valor.val[item])
             continue
         struct[item] = valor.val[item].val
     return struct

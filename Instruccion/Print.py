@@ -37,6 +37,9 @@ class Print(Instruccion):
             if valor.val[item].tipo == Tipo.STRUCT:
                 struct[item] = self.structToString(valor.val[item])
                 continue
+            elif valor.val[item].tipo == Tipo.ARRAY:
+                struct[item] = self.arrayToString(valor.val[item])
+                continue
             struct[item] = valor.val[item].val
         return struct
 
@@ -45,6 +48,9 @@ class Print(Instruccion):
         for item in valor.val:
             if item.tipo == Tipo.ARRAY:
                 array.append(self.arrayToString(item))
+                continue
+            elif item.tipo == Tipo.STRUCT:
+                array.append(self.structToString(item))
                 continue
             array.append(item.val)
         return array
