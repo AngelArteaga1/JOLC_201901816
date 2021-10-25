@@ -14,3 +14,6 @@ class Continue(Instruccion):
         Salida.graph += nombreLit + '[label="CONTINUE"];\n'
         Salida.graph += padre + '->' + nombreLit + ';\n'
         Salida.num += 1
+
+    def compile(self, ambito):
+        print("hola")

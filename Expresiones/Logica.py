@@ -1,6 +1,7 @@
 from Abstracto.Expresion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Logica(Expresion):
     
@@ -43,3 +44,50 @@ class Logica(Expresion):
         Salida.num += 1
         self.left.graph(nombreLit)
         if self.tipo != OpLogica.NOT: self.right.graph(nombreLit)
+
+    def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        generador.addComment("INICIO EXPRESION LOGICA")
+
+        self.checkLabels()
+        lblAndOr = ''
+
+        if self.tipo == OpLogica.AND:
+            lblAndOr = self.left.trueLbl = generador.newLabel()
+            self.right.trueLbl = self.trueLbl
+            self.left.falseLbl = self.right.falseLbl = self.falseLbl
+        elif self.tipo == OpLogica.OR:
+            self.left.trueLbl = self.right.trueLbl = self.trueLbl
+            lblAndOr = self.left.falseLbl = generador.newLabel()
+            self.right.falseLbl = self.falseLbl
+        else:
+            self.left.falseLbl = self.trueLbl
+            self.left.trueLbl = self.falseLbl
+
+        left = self.left.compile(ambito)
+        if self.tipo != OpLogica.NOT:
+            if left.tipo != Tipo.BOOLEAN:
+                print("No se puede utilizar en expresion booleana")
+                return
+            generador.putLabel(lblAndOr)
+
+            right = self.right.compile(ambito)
+            if right.tipo != Tipo.BOOLEAN:
+                print("No se puede utilizar en expresion booleana")
+                return
+        generador.addComment("FINALIZO EXPRESION LOGICA")
+        generador.addSpace()
+        ret = ReturnCompilador(None, Tipo.BOOLEAN, False)
+        ret.trueLbl = self.trueLbl
+        ret.falseLbl = self.falseLbl
+        return ret
+    
+    def checkLabels(self):
+        genAux = Generador()
+        generador = genAux.getInstance()
+        if self.trueLbl == '':
+            self.trueLbl = generador.newLabel()
+        if self.falseLbl == '':
+            self.falseLbl = generador.newLabel()

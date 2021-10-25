@@ -1,6 +1,7 @@
 from Abstracto.Expresion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class ReturnST(Expresion):
 
@@ -23,3 +24,26 @@ class ReturnST(Expresion):
         Salida.graph += padre + '->' + nombreLit + ';\n'
         Salida.num += 1
         self.expresion.graph(nombreLit)
+
+    def compile(self, ambito):
+        if(ambito.returnLbl == ''):
+            print("Return fuera de funcion")
+            return
+        genAux = Generador()
+        generator = genAux.getInstance()
+
+        value = self.expresion.compile(ambito)
+        if(value.tipo == Tipo.BOOLEAN):
+            tempLbl = generator.newLabel()
+            
+            generator.putLabel(value.trueLbl)
+            generator.setStack('P', '1')
+            generator.addGoto(tempLbl)
+
+            generator.putLabel(value.falseLbl)
+            generator.setStack('P', '0')
+
+            generator.putLabel(tempLbl)
+        else:
+            generator.setStack('P', value.val)
+        generator.addGoto(ambito.returnLbl)

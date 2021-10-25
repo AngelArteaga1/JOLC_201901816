@@ -24,3 +24,6 @@ class Parametro(Instruccion):
             Salida.graph += nombreParam + '[label="' + str(self.tipo) + '"];\n'
             Salida.graph += nombreLit + '->' + nombreParam + ';\n'
             Salida.num += 1
+
+    def compile(self, ambito):
+        return self

@@ -36,3 +36,6 @@ class AccesoStruct(Expresion):
         Salida.graph += nombreAtr + '[label=".' + str(self.atributo) + '"];\n'
         Salida.graph += nombreLit + '->' + nombreAtr + ';\n'
         Salida.num += 1
+
+    def compile(self, ambito):
+        print("hola")

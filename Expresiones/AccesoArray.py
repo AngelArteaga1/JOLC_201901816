@@ -58,3 +58,6 @@ class AccesoArray(Expresion):
         Salida.num += 1
         self.id.graph(nombreValor)
         self.expresion.graph(nombreIndice)
+
+    def compile(self, ambito):
+        print("hola")

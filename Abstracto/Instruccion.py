@@ -14,4 +14,8 @@ class Instruccion(ABC):
     @abstractmethod
     def graph(self, ambito):
         pass
+
+    @abstractmethod
+    def compile(self, padre):
+        pass
     

@@ -158,4 +158,3 @@ def getTipo(leftType, rightType, Operador, linea, columna):
         return Tipo.BOOLEAN
     elif Operador == OpRelacional.DISTINT:
         return Tipo.BOOLEAN
-    

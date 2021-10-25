@@ -1,6 +1,8 @@
+from Expresiones.Literal import *
 from Expresiones.Nativas import trunc
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
+from Instruccion.Funciones.ReturnST import ReturnST
 from Simbolo.Ambito import *
 
 class Sentencia(Instruccion):
@@ -28,3 +30,15 @@ class Sentencia(Instruccion):
     def graph(self, padre):
         for instr in self.instrucciones:
             instr.graph(padre)
+
+    def compile(self, ambito):
+        for ins in self.instrucciones:
+            ret = ins.compile(ambito)
+            if ret != None:
+                return ret
+            '''elif ins == self.instrucciones[-1] and self.funcion:
+                #Creamos un ReturnST con nothing
+                returnSt = ReturnST(Literal(None, Tipo.NOTHING, self.linea, self.columna), self.linea, self.columna)
+                ret = returnSt.compile(ambito)
+                if ret != None:
+                    return ret'''

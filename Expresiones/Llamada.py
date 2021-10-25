@@ -3,6 +3,7 @@ from Abstracto.Expresion import *
 from Simbolo.Ambito import *
 from Expresiones.Nativas import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Llamada(Expresion):
 
@@ -146,3 +147,183 @@ class Llamada(Expresion):
                     Salida.num += 1
                 else:
                     param.graph(nombreLista)
+
+    def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
+        if self.id == "parse":
+            if self.parametros[0] == Tipo.INT:
+                ret = self.parametros[1].compile(ambito)
+                generador.fParseToInt()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, ret.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('parseToInt')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.INT, False)
+            elif self.parametros[0] == Tipo.FLOAT:
+                ret = self.parametros[1].compile(ambito)
+                generador.fParseToFloat()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, ret.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('parseToFloat')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.FLOAT, False)
+        elif self.id == "trunc":
+            ret = self.parametros[0].compile(ambito)
+            tmp = generador.addTemp()
+            generador.addExp(tmp,ret.val,'','')
+            return ReturnCompilador(tmp, Tipo.INT, False)
+        elif self.id == "float":
+            ret = self.parametros[0].compile(ambito)
+            tmp = generador.addTemp()
+            generador.addExp(tmp,ret.val,'0.0','+')
+            return ReturnCompilador(tmp, Tipo.FLOAT, False)
+        elif self.id == "string":
+            value = self.parametros[0].compile(ambito)
+            if value.tipo == Tipo.INT:
+                generador.fIntToString()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, value.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('intToString')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.STRING, True)
+            elif value.tipo == Tipo.FLOAT:
+                generador.fFloatToString()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, value.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('floatToString')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.STRING, True)
+        elif self.id == "length":
+            return length(self, ambito)
+        elif self.id == "uppercase":
+                ret = self.parametros[0].compile(ambito)
+                generador.fUppercase()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, ret.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('uppercase')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.STRING, True)
+        elif self.id == "lowercase":
+                ret = self.parametros[0].compile(ambito)
+                generador.fLowercase()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, ret.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('lowercase')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.STRING, True)
+        else:
+            try:
+                func = ambito.getFunc(self.id)
+                if func != None:
+                    paramValues = []
+
+                    size = ambito.size
+                    for param in self.parametros:
+                        paramValues.append(param.compile(ambito))
+                    temp = generador.addTemp()
+
+                    generador.addExp(temp, 'P', size+1, '+')
+                    aux = 0
+                    for param in paramValues:
+                        aux += 1
+                        generador.setStack(temp, param.val)
+                        if aux != len(paramValues):
+                            generador.addExp(temp, temp, '1', '+')
+                    
+                    generador.newEnv(size)
+                    generador.callFun(self.id)
+                    generador.getStack(temp, 'P')
+                    generador.retEnv(size)
+                    
+                    # TODO: Verificar tipo de la funcion. Boolean es distinto
+                    return Return(temp, func.tipo, True)
+                else:
+                    # STRUCT
+                    struct = ambito.getStruct(self.id)
+                    if struct != None:
+                        self.structType = self.id
+
+                        returnTemp = generador.addTemp()
+                        generador.addExp(returnTemp, 'H', '', '')
+
+                        aux = generador.addTemp()
+                        generador.addExp(aux, returnTemp, '', '')
+
+                        generador.addExp('H', 'H', len(struct), '+')
+
+                        for att in self.params:
+                            value = att.compile(ambito)
+
+                            if value.tipo != Tipo.BOOLEAN:
+                                generador.setHeap(aux, value.value)
+                            else:
+                                retLbl = generador.newLabel()
+                                
+                                generador.putLabel(value.trueLbl)
+                                generador.setHeap(aux, '1')
+                                generador.addGoto(retLbl)
+
+                                generador.putLabel(value.falseLbl)
+                                generador.setHeap(aux, '0')
+
+                                generador.putLabel(retLbl)
+                            generador.addExp(aux, aux, '1', '+')
+                        
+                        return Return(returnTemp, Tipo.STRUCT, True)
+            except:
+                print("Error en llamda a funcion")

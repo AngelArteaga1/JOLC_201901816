@@ -1,5 +1,6 @@
 from Abstracto.Instruccion import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Print(Instruccion):
 
@@ -69,3 +70,53 @@ class Print(Instruccion):
         Salida.num += 1
         for val in self.listaVal:
             val.graph(nombreLista)
+
+    def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
+        if not generador.fmt:
+            generador.addFmt()
+        for val in self.listaVal:
+            valor = val.compile(ambito)
+
+            if(valor.tipo == Tipo.INT):
+                generador.addPrint("d", valor.val)
+            elif(valor.tipo == Tipo.FLOAT):
+                generador.addPrintFloat("f", valor.val)
+            elif(valor.tipo == Tipo.CHAR):
+                generador.addPrint("c", ord(valor.val[0]))
+            elif valor.tipo == Tipo.BOOLEAN:
+                tempLbl = generador.newLabel()
+                
+                generador.putLabel(valor.trueLbl)
+                generador.printTrue()
+                
+                generador.addGoto(tempLbl)
+                
+                generador.putLabel(valor.falseLbl)
+                generador.printFalse()
+
+                generador.putLabel(tempLbl)
+            elif valor.tipo == Tipo.STRING:
+                # print(valor.val)
+                generador.fPrintString()
+
+                paramTemp = generador.addTemp()
+                
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, valor.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('printString')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+            elif valor.tipo == Tipo.NOTHING:
+                generador.printNothing()
+            else:
+                print("POR HACER")
+            
+        if self.nuevaLinea:
+            generador.addPrint("c", 10)

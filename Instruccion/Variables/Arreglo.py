@@ -63,3 +63,6 @@ class Arreglo(Instruccion):
         Salida.graph += nombreLit + '->' + nombreigual + ';\n'
         Salida.num += 1
         self.valor.graph(nombreLit)
+
+    def compile(self, ambito):
+        print("hola")

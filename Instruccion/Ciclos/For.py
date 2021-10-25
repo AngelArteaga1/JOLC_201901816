@@ -68,3 +68,6 @@ class For(Instruccion):
         Salida.graph += nombreLit + '->' + nombreInstr + ';\n'
         Salida.num += 1
         self.instrucciones.graph(nombreInstr)
+
+    def compile(self, ambito):
+        print("hola")

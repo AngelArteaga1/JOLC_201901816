@@ -260,11 +260,17 @@ def p_sentencia(t):
 # FUNCTION ST
 def p_decFuncionST(t):
     '''decFuncionST : FUNCTION ID PARABRE PARCIERRA sentencia END
-                    | FUNCTION ID PARABRE listaParametrosST PARCIERRA sentencia END'''
+                    | FUNCTION ID PARABRE PARCIERRA DOSPUNTOS DOSPUNTOS tipoST sentencia END
+                    | FUNCTION ID PARABRE listaParametrosST PARCIERRA sentencia END
+                    | FUNCTION ID PARABRE listaParametrosST PARCIERRA DOSPUNTOS DOSPUNTOS tipoST sentencia END'''
     if len(t) == 7:
-        t[0] = Funcion(t[2], [], t[5], t.lineno(1), t.lexpos(1))
+        t[0] = Funcion(t[2], [], None, t[5], t.lineno(1), t.lexpos(1))
+    elif len(t) == 8:
+        t[0] = Funcion(t[2], t[4], None, t[6], t.lineno(1), t.lexpos(1))
+    elif len(t) == 10:
+        t[0] = Funcion(t[2], [], t[7], t[8], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Funcion(t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
+        t[0] = Funcion(t[2], t[4], t[7], t[8], t.lineno(1), t.lexpos(1))
 
 def p_listaParametrosST(t):
     '''listaParametrosST : listaParametrosST COMA parametroST

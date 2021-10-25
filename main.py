@@ -1,41 +1,30 @@
 from Gramatica.grammar import parse
-from Simbolo.Ambito import *
+from Simbolo.AmbitoCompilador import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 Salida.init()
-ambitoGlobal = Ambito(None, "Global")
+ambitoGlobal = AmbitoCompilador(None, "Global")
 f = open("./input.jl", "r")
 input = f.read()
 Salida.ast = parse(input)
 
+genAux = Generador()
+genAux.clean()
+generador = genAux.getInstance()
+
 for instr in Salida.ast:
+    instr.compile(ambitoGlobal)
+f = open("compilado.go", "w")
+f.write(generador.getCodigo())
+f.close()
+
+print("Se compilo la solucion correctamente :)")
+
+'''for instr in Salida.ast:
     returnST = instr.exec(ambitoGlobal)
     if returnST != None:
         if returnST.tipo == Tipo.RETURNST:
             print("""Error Semantico: el return esta afuera de una funcion, 
             linea: """ + str(instr.linea) + " columna: " + str(instr.columna))
-
-'''listita = []
-for i in Salida.simbolos:
-    obj = {}
-    obj["nombre"] = str(i.id)
-    obj["tipo"] = str(i.tipo)
-    obj["ambito"] = str(i.nombreAmbito)
-    obj["linea"] = i.linea
-    obj["columna"] = i.columa
-    listita.append(obj)
-print(listita)'''
-
-'''#Vamos a graficar el inicio
-Salida.graph += "digraph G\n{\n"
-Salida.graph += 'node[shape="box"];\n'
-nombrePadre = "Nodo" + str(Salida.num)
-Salida.graph += nombrePadre + '[label="RAIZ"];\n'
-Salida.num += 1
-for instr in Salida.ast:
-    instr.graph(nombrePadre)
-Salida.graph += "}"
-
-f = open("dotito.txt", "w")
-f.write(Salida.graph)
-f.close()'''
+'''

@@ -1,6 +1,7 @@
 from Abstracto.Expresion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Acceso(Expresion):
 
@@ -24,3 +25,44 @@ class Acceso(Expresion):
         Salida.graph += nombreLit + '[label="' + str(self.id) + '"];\n'
         Salida.graph += padre + '->' + nombreLit + ';\n'
         Salida.num += 1
+
+    def compile(self, environment):
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        generador.addComment("Compilacion de Acceso")
+        
+        var = environment.getVar(self.id)
+        if(var == None):
+            print("Error, no existe la variable")
+            return ReturnCompilador(None, Tipo.NOTHING, False)
+
+        # Temporal para guardar variable
+        temp = generador.addTemp()
+
+        # Obtencion de posicion de la variable
+        tempPos = var.pos
+        if(not var.isGlobal):
+            tempPos = generador.addTemp()
+            generador.addExp(tempPos, 'P', var.pos, "+")
+        generador.getStack(temp, tempPos)
+
+        if var.tipo != Tipo.BOOLEAN:
+            generador.addComment("Fin compilacion acceso")
+            generador.addSpace()
+            return Return(temp, var.tipo, True)
+        if self.trueLbl == '':
+            self.trueLbl = generador.newLabel()
+        if self.falseLbl == '':
+            self.falseLbl = generador.newLabel()
+        
+        generador.addIf(temp, '1', '==', self.trueLbl)
+        generador.addGoto(self.falseLbl)
+
+        generador.addComment("Fin compilacion acceso")
+        generador.addSpace()
+
+        ret = Return(None, Tipo.BOOLEAN, False)
+        ret.trueLbl = self.trueLbl
+        ret.falseLbl = self.falseLbl
+        return ret

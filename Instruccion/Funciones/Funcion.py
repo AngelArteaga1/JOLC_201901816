@@ -1,11 +1,14 @@
 from Abstracto.Instruccion import *
 from Export import Salida
+from Simbolo.AmbitoCompilador import AmbitoCompilador
+from Simbolo.Generador import Generador
 
 class Funcion(Instruccion):
-    def __init__(self, id, parametros, instrucciones, linea, columna):
+    def __init__(self, id, parametros, tipo, instrucciones, linea, columna):
         Instruccion.__init__(self, linea, columna)
         self.id = id
         self.parametros = parametros
+        self.tipo = tipo
         self.instrucciones = instrucciones
     
     def exec(self, ambito):
@@ -37,3 +40,29 @@ class Funcion(Instruccion):
         Salida.graph += nombreLit + '->' + nombreInstr + ';\n'
         Salida.num += 1
         self.instrucciones.graph(nombreInstr)
+
+    def compile(self, environment):
+        environment.saveFunc(self.id, self)
+        genAux = Generador()
+        generador = genAux.getInstance()
+        
+        newEnv = AmbitoCompilador(environment, self.id)
+
+        returnLbl = generador.newLabel()
+        newEnv.returnLbl = returnLbl
+        newEnv.size = 1
+
+        for param in self.parametros:
+            newEnv.saveVar(param.id, param.tipo, (param.tipo == Tipo.STRING or param.tipo == Tipo.STRUCT))
+        
+        generador.addBeginFunc(self.id)
+
+        #try:
+        self.instrucciones.funcion = True
+        self.instrucciones.compile(newEnv)
+        #except:
+            #print(f'Error al compilar instrucciones de {self.id}')
+        
+        generador.addGoto(returnLbl)
+        generador.putLabel(returnLbl)
+        generador.addEndFunc()

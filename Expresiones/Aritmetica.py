@@ -2,6 +2,7 @@ from Abstracto.Expresion import *
 from Abstracto.Return import *
 from Expresiones.ResultadoTipo import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Aritmetica(Expresion):
     
@@ -65,3 +66,88 @@ class Aritmetica(Expresion):
         Salida.num += 1
         self.left.graph(nombreLit)
         self.right.graph(nombreLit)
+
+    def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
+        leftValue = self.left.compile(ambito)
+        rightValue = self.right.compile(ambito)
+
+        temp = generador.addTemp()
+        op = ''
+        resultadoTipo = getTipo(leftValue.tipo, rightValue.tipo, self.tipo, self.linea, self.columna)
+        if(self.tipo == OpAritmetico.PLUS):
+            op = '+'
+        elif(self.tipo == OpAritmetico.MINUS):
+            op = '-'
+        elif(self.tipo == OpAritmetico.TIMES):
+            if leftValue.tipo == Tipo.STRING and rightValue.tipo == Tipo.STRING:
+                generador.fConcatenar()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, leftValue.val)
+                
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, rightValue.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('concatenar')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, resultadoTipo, True)
+            else:
+                op = '*'
+        elif(self.tipo == OpAritmetico.DIV):
+            op = '/' 
+        elif(self.tipo == OpAritmetico.MOD):
+            if not generador.math:
+                generador.addMath()
+            generador.addExpMod(temp, leftValue.val, rightValue.val)
+            return ReturnCompilador(temp, resultadoTipo, True)
+        if (self.tipo == OpAritmetico.POW):
+            if leftValue.tipo == Tipo.STRING and rightValue.tipo == Tipo.INT:
+                generador.fPotenciaStringLeft()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, leftValue.val)
+                
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, rightValue.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('potenciaLeft')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, resultadoTipo, True)
+            else:
+                generador.fPotencia()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, leftValue.val)
+                
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, rightValue.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('potencia')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, resultadoTipo, True)
+        else:
+            generador.addExp(temp, leftValue.val, rightValue.val, op)
+            return ReturnCompilador(temp, resultadoTipo, True)

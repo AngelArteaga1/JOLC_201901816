@@ -13,6 +13,17 @@ class Ambito:
         self.tipoStructs = {}
         self.mutableStruct = {}
         self.funcion = False
+        # NUEVO
+        self.size = 0
+        self.breakLbl = ''
+        self.continueLbl = ''
+        self.returnLbl = ''
+        if(anterior != None):
+            self.size = self.anterior.size
+            self.breakLbl = self.anterior.breakLbl
+            self.continueLbl = self.anterior.continueLbl
+            self.returnLbl = self.anterior.returnLbl
+
     
     def guardarVar(self, id, val, tipoVar, linea = 0, columna = 0):
         env = self

@@ -15,3 +15,6 @@ class Break(Instruccion):
         Salida.graph += nombreLit + '[label="BREAK"];\n'
         Salida.graph += padre + '->' + nombreLit + ';\n'
         Salida.num += 1
+
+    def compile(self, ambito):
+        print("hola")

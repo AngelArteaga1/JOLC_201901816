@@ -40,3 +40,6 @@ class Rango(Expresion):
         Salida.num += 1
         self.minimo.graph(nombreLit)
         self.maximo.graph(nombreLit)
+
+    def compile(self, ambito):
+        print("hola")

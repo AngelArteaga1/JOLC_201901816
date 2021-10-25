@@ -43,3 +43,6 @@ class If(Instruccion):
             Salida.graph += nombreLit + '->' + nombreElse + ';\n'
             Salida.num += 1
             self.elseSt.graph(nombreElse)
+
+    def compile(self, ambito):
+        print("hola")

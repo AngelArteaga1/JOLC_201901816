@@ -26,3 +26,6 @@ class decStruct(Instruccion):
 
     def graph(self, padre):
         return ""
+
+    def compile(self, ambito):
+        print("hola")

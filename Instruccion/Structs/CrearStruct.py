@@ -37,3 +37,6 @@ class CrearStruct(Instruccion):
             Salida.num += 1
             for param in self.atributo:
                 param.graph(nombreParams)
+
+    def compile(self, ambito):
+        print("hola")

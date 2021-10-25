@@ -1,6 +1,7 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Declaracion(Instruccion):
 
@@ -82,3 +83,41 @@ class Declaracion(Instruccion):
             Salida.graph += nombreTipo + '[label=":' + str(self.tipo) + '"];\n'
             Salida.graph += nombreLit + '->' + nombreTipo + ';\n'
             Salida.num += 1
+
+    def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        generador.addComment("Compilacion de valor de variable")
+        # Compilacion de valor que estamos asignando
+        val = self.val.compile(ambito)
+
+        generador.addComment("Fin de valor de variable")
+
+        # Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
+        newVar = ambito.getVar(self.id)
+        if newVar == None:
+            newVar = ambito.saveVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT), self.val.structType)
+        newVar.tipo = val.tipo
+
+        # Obtencion de posicion de la variable
+        tempPos = newVar.pos
+        if(not newVar.isGlobal):
+            tempPos = generador.addTemp()
+            generador.addExp(tempPos, 'P', newVar.pos, "+")
+        
+        if(val.tipo == Tipo.BOOLEAN):
+            tempLbl = generador.newLabel()
+            
+            generador.putLabel(val.trueLbl)
+            generador.setStack(tempPos, "1")
+            
+            generador.addGoto(tempLbl)
+
+            generador.putLabel(val.falseLbl)
+            generador.setStack(tempPos, "0")
+
+            generador.putLabel(tempLbl)
+        else:
+            generador.setStack(tempPos, val.val)
+        generador.addSpace()

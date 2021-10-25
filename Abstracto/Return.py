@@ -60,3 +60,13 @@ class Return:
 
     def exec(self, ambito):
         return self
+
+class ReturnCompilador:
+    def __init__(self, val, tipo, esTemp, auxTipo = ""):
+        self.val = val
+        self.tipo = tipo
+        self.esTemp = esTemp
+        self.auxTipo = auxTipo
+
+    def exec(self, ambito):
+        return self
