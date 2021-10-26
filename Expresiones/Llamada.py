@@ -230,6 +230,22 @@ class Llamada(Expresion):
                 generador.retEnv(ambito.size)
 
                 return ReturnCompilador(temp, Tipo.STRING, True)
+            elif value.tipo == Tipo.CHAR:
+                generador.fCharToString()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, value.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('charToString')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.STRING, True)
         elif self.id == "length":
             return length(self, ambito)
         elif self.id == "uppercase":

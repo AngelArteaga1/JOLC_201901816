@@ -6,7 +6,7 @@ import (
 	"math";
 )
 
-var t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45, t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60, t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71, t72, t73, t74, t75, t76, t77, t78, t79, t80, t81, t82, t83, t84, t85, t86, t87, t88, t89, t90, t91, t92, t93, t94, t95, t96, t97, t98, t99, t100, t101, t102, t103, t104, t105, t106, t107, t108, t109, t110, t111, t112, t113, t114, t115, t116, t117, t118, t119, t120, t121, t122, t123, t124, t125, t126, t127, t128, t129, t130, t131, t132, t133, t134 float64;
+var t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45, t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60, t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71, t72, t73, t74, t75, t76, t77, t78, t79, t80, t81, t82, t83, t84, t85, t86, t87, t88, t89, t90, t91, t92, t93, t94, t95, t96, t97, t98, t99, t100, t101, t102, t103, t104, t105, t106, t107, t108, t109, t110, t111, t112, t113, t114, t115, t116, t117, t118, t119, t120, t121, t122, t123, t124, t125, t126, t127, t128, t129, t130, t131, t132, t133, t134, t135, t136, t137 float64;
 var P, H float64;
 var stack [30101999]float64;
 var heap [30101999]float64;
@@ -244,33 +244,47 @@ func intToString(){
 	return;
 }
 func floatToString(){
-	t120=P+1;
-	t121=stack[int(t120)];
-	t122=stack[int(t120)];
-	t123=stack[int(t120)];
-	t124=0;
-	t125=1;
+	t121=P+1;
+	t122=stack[int(t121)];
+	t123=stack[int(t121)];
+	t124=stack[int(t121)];
+	t125=0;
+	t126=1;
 	L39:
-	if t122 < 1 {goto L41;}
-	t125=t125*10;
-	t122=t122/10;
+	if t123 < 1 {goto L42;}
+	t126=t126*10;
+	t123=t123/10;
 	goto L39;
-	L41:
-	t125=t125/10;
-	t126=H;
+	L42:
+	t126=t126/10;
+	t127=H;
 	L40:
-	if t125 < 0.00000001 {goto L38;}
-	t123=t121/t125;
-	t124=t123+48;
-	heap[int(H)]=t124;
+	if t126 < 1 {goto L43;}
+	t124=t122/t126;
+	t125=t124+48;
+	heap[int(H)]=t125;
 	H=H+1;
-	t121=math.Mod(t121,t125);
-	t125=t125/10;
+	t122=math.Mod(t122,t126);
+	t126=t126/10;
 	goto L40;
+	L43:
+	heap[int(H)]=46;
+	H=H+1;
+	t123=0;
+	L41:
+	if t123 >= 8 {goto L38;}
+	if t122 == 0 {goto L38;}
+	t122=t122*10;
+	t125=t122+48;
+	heap[int(H)]=t125;
+	H=H+1;
+	t122=math.Mod(t122,1);
+	t123=t123+1;
+	goto L41;
 	L38:
 	heap[int(H)]=-1;
 	H=H+1;
-	stack[int(P)]=t126;
+	stack[int(P)]=t127;
 	return;
 }
 
@@ -911,6 +925,10 @@ func main(){
 	H=H+1;
 	heap[int(H)]=53;
 	H=H+1;
+	heap[int(H)]=52;
+	H=H+1;
+	heap[int(H)]=54;
+	H=H+1;
 	heap[int(H)]=58;
 	H=H+1;
 	heap[int(H)]=32;
@@ -924,14 +942,15 @@ func main(){
 	printString();
 	t119=stack[int(P)];
 	P=P-5;
-	t127=P+5;
-	t127=t127+1;
-	stack[int(t127)]=1568.5;
+	t120=1568.546+100;
+	t128=P+5;
+	t128=t128+1;
+	stack[int(t128)]=t120;
 	P=P+5;
 	floatToString();
-	t128=stack[int(P)];
+	t129=stack[int(P)];
 	P=P-5;
-	t129=H;
+	t130=H;
 	heap[int(H)]=112;
 	H=H+1;
 	heap[int(H)]=101;
@@ -942,22 +961,74 @@ func main(){
 	H=H+1;
 	heap[int(H)]=-1;
 	H=H+1;
-	t131=P+5;
-	t131=t131+1;
-	stack[int(t131)]=t128;
-	t131=t131+1;
-	stack[int(t131)]=t129;
+	t132=P+5;
+	t132=t132+1;
+	stack[int(t132)]=t129;
+	t132=t132+1;
+	stack[int(t132)]=t130;
 	P=P+5;
 	concatenar();
-	t132=stack[int(P)];
+	t133=stack[int(P)];
 	P=P-5;
-	t133=P+5;
-	t133=t133+1;
-	stack[int(t133)]=t132;
+	t134=P+5;
+	t134=t134+1;
+	stack[int(t134)]=t133;
 	P=P+5;
 	printString();
-	t134=stack[int(P)];
+	t135=stack[int(P)];
 	P=P-5;
+	fmt.Printf("%c", int(10));
+	t136=H;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=108;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=112;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=105;
+	H=H+1;
+	heap[int(H)]=109;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=118;
+	H=H+1;
+	heap[int(H)]=111;
+	H=H+1;
+	heap[int(H)]=99;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=108;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t137=97*t136;
+	fmt.Printf("%c", int(110));
+	fmt.Printf("%c", int(111));
+	fmt.Printf("%c", int(116));
+	fmt.Printf("%c", int(104));
+	fmt.Printf("%c", int(105));
+	fmt.Printf("%c", int(110));
+	fmt.Printf("%c", int(103));
 	fmt.Printf("%c", int(10));
 
 }

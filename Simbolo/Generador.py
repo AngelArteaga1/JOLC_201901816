@@ -30,6 +30,7 @@ class Generador:
         self.parseToFloat = False
         self.intToString = False
         self.floatToString = False
+        self.charToString = False
 
     def clean(self):
         # Contadores
@@ -905,8 +906,10 @@ class Generador:
         # Label para los ciclos
         ciclo1 = self.newLabel()
         ciclo2 = self.newLabel()
+        ciclo3 = self.newLabel()
         # Label para siguiente
         siguiente = self.newLabel()
+        siguiente2 = self.newLabel()
 
         # Temporal puntero a Stack
         tempP = self.addTemp()
@@ -952,7 +955,7 @@ class Generador:
         #Empezamos el segundo ciclo
         self.putLabel(ciclo2)
 
-        self.addIf(mult, '0.00000001', '<', returnLbl)
+        self.addIf(mult, '1', '<', siguiente2)
 
 
         #Aqui empezamos las operaciones de cada iteracion
@@ -966,11 +969,75 @@ class Generador:
         self.addExp(mult,mult,'10','/')
         #Aqui regresamos al ciclo
         self.addGoto(ciclo2)
+
+        #Empezamos el proceso de pasar los decimales
+        self.putLabel(siguiente2)
+
+        #agregamos el punto
+        self.setHeap('H','46')
+        self.nextHeap()
+        self.addExp(TmpNumero,'0','','')
         
+        #Empezamos el tercer ciclo
+        self.putLabel(ciclo3)
+
+        self.addIf(TmpNumero, '8', '>=', returnLbl)
+        self.addIf(numero, '0', '==', returnLbl)
+
+
+        #Aqui empezamos las operaciones de cada iteracion
+        self.addExp(numero,numero,'10','*')
+        self.addExp(caracter,numero,'48','+')
+        self.setHeap('H',caracter)
+        self.nextHeap()
+        self.addExpMod(numero,numero,'1')
+        
+        #Aqui iteramos
+        self.addExp(TmpNumero,TmpNumero,'1','+')
+        #Aqui regresamos al ciclo
+        self.addGoto(ciclo3)
 
         self.putLabel(returnLbl)
         self.setHeap('H','-1')
         self.nextHeap()
         self.setStack('P', resultado)
+        self.addEndFunc()
+        self.enNativas = False
+
+    def fCharToString(self):
+        if(self.charToString):
+            return
+        self.charToString = True
+        self.enNativas = True
+
+        self.addBeginFunc('charToString')
+
+        # Temporal puntero a Stack
+        tempP = self.addTemp()
+        self.addExp(tempP, 'P', '1', '+')
+
+        # Temporal puntero a Heap
+        tempH = self.addTemp()
+        self.getStack(tempH, tempP)
+
+        # Temporal de la posicion del heap
+        tmp = self.addTemp()
+        self.addExp(tmp,'H','','')
+
+        #Resultado, solo obtenemos el heap
+        resultado = self.addTemp()
+        self.addExp(resultado, 'H','','')
+
+        #Solo metemos en el heap el char mas un -1
+        self.setHeap(tmp,tempH)
+        self.nextHeap()
+        self.addExp(tmp,tmp,'1','+')
+        self.setHeap(tmp,'-1')
+        self.nextHeap()
+
+        #regresamos el resultado
+        self.setStack('P', resultado)
+
+
         self.addEndFunc()
         self.enNativas = False

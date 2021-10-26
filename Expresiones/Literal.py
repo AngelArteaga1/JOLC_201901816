@@ -41,8 +41,10 @@ class Literal(Expresion):
     def compile(self, ambito):
         genAux = Generador()
         generador = genAux.getInstance()
-        if(self.tipo == Tipo.INT or self.tipo == Tipo.FLOAT or self.tipo == Tipo.CHAR):
+        if(self.tipo == Tipo.INT or self.tipo == Tipo.FLOAT):
             return ReturnCompilador(str(self.val), self.tipo, False)
+        elif self.tipo == Tipo.CHAR:
+            return ReturnCompilador(str(ord(self.val[0])), self.tipo, False)
         elif self.tipo == Tipo.BOOLEAN:
             if self.trueLbl == '':
                 self.trueLbl = generador.newLabel()

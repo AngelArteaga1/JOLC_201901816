@@ -22,10 +22,10 @@ println("Lower: ", lowercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"));
 
 println(parse(Int64, "100.4")+100);
 println(parse(Float64, "100.4")+0.6);
-
+ 
 println("String de 1668: ",string(1568+100)*"pepe");
-println("String de 1668.5: ",string(1568.5)*"pepe");
-
+println("String de 1668.546: ",string(1568.546+100)*"pepe");
+println(string('a') * " es la primera vocal");
 #=function pepe(comida::String)
     println(comida);
 end;

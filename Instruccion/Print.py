@@ -84,7 +84,7 @@ class Print(Instruccion):
             elif(valor.tipo == Tipo.FLOAT):
                 generador.addPrintFloat("f", valor.val)
             elif(valor.tipo == Tipo.CHAR):
-                generador.addPrint("c", ord(valor.val[0]))
+                generador.addPrint("c", valor.val)
             elif valor.tipo == Tipo.BOOLEAN:
                 tempLbl = generador.newLabel()
                 
