@@ -270,7 +270,7 @@ def p_decFuncionST(t):
     elif len(t) == 10:
         t[0] = Funcion(t[2], [], t[7], t[8], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Funcion(t[2], t[4], t[7], t[8], t.lineno(1), t.lexpos(1))
+        t[0] = Funcion(t[2], t[4], t[8], t[9], t.lineno(1), t.lexpos(1))
 
 def p_listaParametrosST(t):
     '''listaParametrosST : listaParametrosST COMA parametroST

@@ -246,8 +246,61 @@ class Llamada(Expresion):
                 generador.retEnv(ambito.size)
 
                 return ReturnCompilador(temp, Tipo.STRING, True)
+            elif value.tipo == Tipo.BOOLEAN:
+                tempLbl = generador.newLabel()
+                result = generador.addTemp()
+                
+                generador.putLabel(value.trueLbl)
+                # Aqui guardamos el true en el heap
+                generador.addExp(result,'H','','')
+                generador.setHeap('H','116') #t
+                generador.nextHeap()
+                generador.setHeap('H','114') #r
+                generador.nextHeap()
+                generador.setHeap('H','117') #u
+                generador.nextHeap()
+                generador.setHeap('H','101') #e
+                generador.nextHeap()
+                generador.setHeap('H','-1')
+                generador.nextHeap()
+                
+                generador.addGoto(tempLbl)
+                
+                generador.putLabel(value.falseLbl)
+                # Aqui guardamos el true en el heap
+                generador.addExp(result,'H','','')
+                generador.setHeap('H','102') #f
+                generador.nextHeap()
+                generador.setHeap('H','97')  #a
+                generador.nextHeap()
+                generador.setHeap('H','108') #l
+                generador.nextHeap()
+                generador.setHeap('H','115') #s
+                generador.nextHeap()
+                generador.setHeap('H','101') #e
+                generador.nextHeap()
+                generador.setHeap('H','-1')
+                generador.nextHeap()
+
+                generador.putLabel(tempLbl)
+                return ReturnCompilador(result, Tipo.STRING, True)
         elif self.id == "length":
-            return length(self, ambito)
+                ret = self.parametros[0].compile(ambito)
+                generador.fLength()
+                paramTemp = generador.addTemp()
+
+                generador.addExp(paramTemp, 'P', ambito.size, '+')
+                generador.addExp(paramTemp, paramTemp, '1', '+')
+                generador.setStack(paramTemp, ret.val)
+                
+                generador.newEnv(ambito.size)
+                generador.callFun('length')
+
+                temp = generador.addTemp()
+                generador.getStack(temp, 'P')
+                generador.retEnv(ambito.size)
+
+                return ReturnCompilador(temp, Tipo.INT, False)
         elif self.id == "uppercase":
                 ret = self.parametros[0].compile(ambito)
                 generador.fUppercase()

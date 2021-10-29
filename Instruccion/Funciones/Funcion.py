@@ -46,20 +46,20 @@ class Funcion(Instruccion):
         genAux = Generador()
         generador = genAux.getInstance()
         
-        newEnv = AmbitoCompilador(environment, self.id)
+        nuevoAmbito = AmbitoCompilador(environment, self.id)
 
         returnLbl = generador.newLabel()
-        newEnv.returnLbl = returnLbl
-        newEnv.size = 1
+        nuevoAmbito.returnLbl = returnLbl
+        nuevoAmbito.size = 1
 
         for param in self.parametros:
-            newEnv.saveVar(param.id, param.tipo, (param.tipo == Tipo.STRING or param.tipo == Tipo.STRUCT))
+            nuevoAmbito.saveVar(param.id, param.tipo, (param.tipo == Tipo.STRING or param.tipo == Tipo.STRUCT))
         
         generador.addBeginFunc(self.id)
 
         #try:
         self.instrucciones.funcion = True
-        self.instrucciones.compile(newEnv)
+        self.instrucciones.compile(nuevoAmbito)
         #except:
             #print(f'Error al compilar instrucciones de {self.id}')
         

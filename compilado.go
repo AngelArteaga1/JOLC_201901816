@@ -6,7 +6,7 @@ import (
 	"math";
 )
 
-var t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45, t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60, t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71, t72, t73, t74, t75, t76, t77, t78, t79, t80, t81, t82, t83, t84, t85, t86, t87, t88, t89, t90, t91, t92, t93, t94, t95, t96, t97, t98, t99, t100, t101, t102, t103, t104, t105, t106, t107, t108, t109, t110, t111, t112, t113, t114, t115, t116, t117, t118, t119, t120, t121, t122, t123, t124, t125, t126, t127, t128, t129, t130, t131, t132, t133, t134, t135, t136, t137 float64;
+var t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45, t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60, t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71, t72, t73, t74, t75, t76, t77, t78, t79, t80, t81, t82, t83, t84, t85, t86, t87, t88, t89, t90, t91, t92, t93, t94, t95, t96, t97, t98, t99, t100, t101, t102, t103, t104, t105, t106, t107, t108, t109, t110, t111, t112, t113, t114, t115, t116, t117, t118, t119, t120, t121, t122, t123, t124, t125, t126, t127, t128, t129, t130, t131, t132, t133, t134, t135, t136, t137, t138, t139, t140, t141, t142, t143, t144, t145, t146, t147, t148, t149, t150, t151, t152, t153, t154, t155, t156, t157, t158, t159, t160, t161, t162, t163, t164, t165, t166, t167, t168, t169, t170, t171, t172, t173, t174, t175, t176, t177, t178, t179 float64;
 var P, H float64;
 var stack [30101999]float64;
 var heap [30101999]float64;
@@ -287,7 +287,90 @@ func floatToString(){
 	stack[int(P)]=t127;
 	return;
 }
+func charToString(){
+	t136=P+1;
+	t137=stack[int(t136)];
+	t138=H;
+	t139=H;
+	heap[int(t138)]=t137;
+	H=H+1;
+	t138=t138+1;
+	heap[int(t138)]=-1;
+	H=H+1;
+	stack[int(P)]=t139;
+	return;
+}
+func length(){
+	t159=P+1;
+	t160=stack[int(t159)];
+	t161=0;
+	L49:
+	t162=heap[int(t160)];
+	if t162 == -1 {goto L48;}
+	t161=t161+1;
+	t160=t160+1;
+	goto L49;
+	L48:
+	stack[int(P)]=t161;
+	return;
+}
 
+/*-----FUNCS-----*/
+func sumar(){
+	t168=H;
+	heap[int(H)]=69;
+	H=H+1;
+	heap[int(H)]=110;
+	H=H+1;
+	heap[int(H)]=116;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=117;
+	H=H+1;
+	heap[int(H)]=109;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t169=P+3;
+	t169=t169+1;
+	stack[int(t169)]=t168;
+	P=P+3;
+	printString();
+	t170=stack[int(P)];
+	P=P-3;
+	fmt.Printf("%c", int(10));
+	/* Compilacion de Acceso */
+	t172=P+1;
+	t171=stack[int(t172)];
+	/* Fin compilacion acceso */
+	
+	/* Compilacion de Acceso */
+	t174=P+2;
+	t173=stack[int(t174)];
+	/* Fin compilacion acceso */
+	
+	t175=t171+t173;
+	stack[int(P)]=t175;
+	goto L50;
+	goto L50;
+	L50:
+	return;
+}
 
 func main(){
 	/* Compilacion de valor de variable */
@@ -978,7 +1061,14 @@ func main(){
 	t135=stack[int(P)];
 	P=P-5;
 	fmt.Printf("%c", int(10));
-	t136=H;
+	t140=P+5;
+	t140=t140+1;
+	stack[int(t140)]=97;
+	P=P+5;
+	charToString();
+	t141=stack[int(P)];
+	P=P-5;
+	t142=H;
 	heap[int(H)]=32;
 	H=H+1;
 	heap[int(H)]=101;
@@ -1021,14 +1111,225 @@ func main(){
 	H=H+1;
 	heap[int(H)]=-1;
 	H=H+1;
-	t137=97*t136;
-	fmt.Printf("%c", int(110));
-	fmt.Printf("%c", int(111));
-	fmt.Printf("%c", int(116));
-	fmt.Printf("%c", int(104));
-	fmt.Printf("%c", int(105));
-	fmt.Printf("%c", int(110));
-	fmt.Printf("%c", int(103));
+	t144=P+5;
+	t144=t144+1;
+	stack[int(t144)]=t141;
+	t144=t144+1;
+	stack[int(t144)]=t142;
+	P=P+5;
+	concatenar();
+	t145=stack[int(P)];
+	P=P-5;
+	t146=P+5;
+	t146=t146+1;
+	stack[int(t146)]=t145;
+	P=P+5;
+	printString();
+	t147=stack[int(P)];
+	P=P-5;
+	fmt.Printf("%c", int(10));
+	/* INICIO EXPRESION LOGICA */
+	/* INICIO EXPRESION LOGICA */
+	goto L46;
+	/* GOTO PARA EVITAR ERROR DE GO */
+	goto L44;
+	L46:
+	goto L44;
+	/* GOTO PARA EVITAR ERROR DE GO */
+	goto L45;
+	/* FINALIZO EXPRESION LOGICA */
+	
+	/* FINALIZO EXPRESION LOGICA */
+	
+	L44:
+	t148=H;
+	heap[int(H)]=116;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=117;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	goto L47;
+	L45:
+	t148=H;
+	heap[int(H)]=102;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=108;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	L47:
+	t149=H;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=105;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=111;
+	H=H+1;
+	heap[int(H)]=121;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t151=P+5;
+	t151=t151+1;
+	stack[int(t151)]=t148;
+	t151=t151+1;
+	stack[int(t151)]=t149;
+	P=P+5;
+	concatenar();
+	t152=stack[int(P)];
+	P=P-5;
+	t153=P+5;
+	t153=t153+1;
+	stack[int(t153)]=t152;
+	P=P+5;
+	printString();
+	t154=stack[int(P)];
+	P=P-5;
+	fmt.Printf("%c", int(10));
+	t155=H;
+	heap[int(H)]=39;
+	H=H+1;
+	heap[int(H)]=67;
+	H=H+1;
+	heap[int(H)]=111;
+	H=H+1;
+	heap[int(H)]=109;
+	H=H+1;
+	heap[int(H)]=105;
+	H=H+1;
+	heap[int(H)]=100;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=39;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=116;
+	H=H+1;
+	heap[int(H)]=105;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=110;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=58;
+	H=H+1;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t156=P+5;
+	t156=t156+1;
+	stack[int(t156)]=t155;
+	P=P+5;
+	printString();
+	t157=stack[int(P)];
+	P=P-5;
+	t158=H;
+	heap[int(H)]=67;
+	H=H+1;
+	heap[int(H)]=111;
+	H=H+1;
+	heap[int(H)]=109;
+	H=H+1;
+	heap[int(H)]=105;
+	H=H+1;
+	heap[int(H)]=100;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t163=P+5;
+	t163=t163+1;
+	stack[int(t163)]=t158;
+	P=P+5;
+	length();
+	t164=stack[int(P)];
+	P=P-5;
+	fmt.Printf("%d", int(t164));
+	t165=H;
+	heap[int(H)]=32;
+	H=H+1;
+	heap[int(H)]=108;
+	H=H+1;
+	heap[int(H)]=101;
+	H=H+1;
+	heap[int(H)]=116;
+	H=H+1;
+	heap[int(H)]=114;
+	H=H+1;
+	heap[int(H)]=97;
+	H=H+1;
+	heap[int(H)]=115;
+	H=H+1;
+	heap[int(H)]=-1;
+	H=H+1;
+	t166=P+5;
+	t166=t166+1;
+	stack[int(t166)]=t165;
+	P=P+5;
+	printString();
+	t167=stack[int(P)];
+	P=P-5;
+	fmt.Printf("%c", int(10));
+	/* Compilacion de valor de variable */
+	/* Fin de valor de variable */
+	stack[int(5)]=0;
+	
+	/* Compilacion de valor de variable */
+	t176=P+7;
+	stack[int(t176)]=10;
+	t176=t176+1;
+	stack[int(t176)]=10;
+	P=P+6;
+	sumar();
+	t176=stack[int(P)];
+	P=P-6;
+	t177=P+7;
+	stack[int(t177)]=20;
+	t177=t177+1;
+	stack[int(t177)]=20;
+	P=P+6;
+	sumar();
+	t177=stack[int(P)];
+	P=P-6;
+	t178=P+7;
+	stack[int(t178)]=t176;
+	t178=t178+1;
+	stack[int(t178)]=t177;
+	P=P+6;
+	sumar();
+	t178=stack[int(P)];
+	P=P-6;
+	/* Fin de valor de variable */
+	stack[int(6)]=t178;
+	
+	/* Compilacion de Acceso */
+	t179=stack[int(6)];
+	/* Fin compilacion acceso */
+	
+	fmt.Printf("%d", int(t179));
 	fmt.Printf("%c", int(10));
 
 }

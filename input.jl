@@ -26,8 +26,16 @@ println(parse(Float64, "100.4")+0.6);
 println("String de 1668: ",string(1568+100)*"pepe");
 println("String de 1668.546: ",string(1568.546+100)*"pepe");
 println(string('a') * " es la primera vocal");
-#=function pepe(comida::String)
-    println(comida);
+println(string(!(true && false)) * " si soy");
+println("'Comida' tiene: ", length("Comida"), " letras");
+
+# Ahora viene la prueba que es algo recursiva
+rec = 0;
+
+function sumar(a::Int64, b::Int64)::Int64
+    println("Entre a sumar");
+    return a+b;
 end;
 
-pepe("hola");=#
+retornable = sumar(sumar(10,10),sumar(20,20));
+println(retornable);

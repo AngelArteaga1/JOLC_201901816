@@ -31,6 +31,7 @@ class Generador:
         self.intToString = False
         self.floatToString = False
         self.charToString = False
+        self.length = False
 
     def clean(self):
         # Contadores
@@ -1039,5 +1040,49 @@ class Generador:
         self.setStack('P', resultado)
 
 
+        self.addEndFunc()
+        self.enNativas = False
+
+    def fLength(self):
+        if(self.length):
+            return
+        self.length = True
+        self.enNativas = True
+
+        self.addBeginFunc('length')
+        # Label para salir de la funcion
+        returnLbl = self.newLabel()
+        # Label para la comparacion para buscar fin de cadena
+        compareLbl = self.newLabel()
+
+        # Temporal puntero a Stack
+        tempP = self.addTemp()
+        self.addExp(tempP, 'P', '1', '+')
+
+        # Temporal puntero a Heap
+        tempH = self.addTemp()
+        self.getStack(tempH, tempP)
+
+        # Temporal para devolver el resultado
+        result = self.addTemp()
+        self.addExp(result, '0','','')
+
+        # Temporal para comparar
+        tempC = self.addTemp()
+
+        self.putLabel(compareLbl)
+
+        self.getHeap(tempC, tempH)
+
+        self.addIf(tempC, '-1', '==', returnLbl)
+
+        self.addExp(result, result, '1', '+')
+
+        self.addExp(tempH, tempH, '1', '+')
+
+        self.addGoto(compareLbl)
+
+        self.putLabel(returnLbl)
+        self.setStack('P', result)
         self.addEndFunc()
         self.enNativas = False
