@@ -41,12 +41,12 @@ class Funcion(Instruccion):
         Salida.num += 1
         self.instrucciones.graph(nombreInstr)
 
-    def compile(self, environment):
-        environment.saveFunc(self.id, self)
+    def compile(self, ambito):
+        ambito.saveFunc(self.id, self)
         genAux = Generador()
         generador = genAux.getInstance()
         
-        nuevoAmbito = AmbitoCompilador(environment, self.id)
+        nuevoAmbito = AmbitoCompilador(ambito.getGlobal(), self.id)
 
         returnLbl = generador.newLabel()
         nuevoAmbito.returnLbl = returnLbl

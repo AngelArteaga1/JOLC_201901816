@@ -33,6 +33,10 @@ class ReturnST(Expresion):
         generator = genAux.getInstance()
 
         value = self.expresion.compile(ambito)
+        if(value.tipo == Tipo.NOTHING):
+            generator.setStack('P', '0')
+            generator.addGoto(ambito.returnLbl)
+            return
         if(value.tipo == Tipo.BOOLEAN):
             tempLbl = generator.newLabel()
             

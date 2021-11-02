@@ -1,3 +1,4 @@
+from Instruccion.Funciones.Funcion import Funcion
 from Instruccion.Funciones.Parametro import Parametro
 from Abstracto.Expresion import *
 from Simbolo.Ambito import *
@@ -360,7 +361,10 @@ class Llamada(Expresion):
                     generador.retEnv(size)
                     
                     # TODO: Verificar tipo de la funcion. Boolean es distinto
-                    return Return(temp, func.tipo, True)
+                    if func.tipo != None:
+                        return ReturnCompilador(temp, func.tipo, True)
+                    else:
+                        return
                 else:
                     # STRUCT
                     struct = ambito.getStruct(self.id)
@@ -393,6 +397,6 @@ class Llamada(Expresion):
                                 generador.putLabel(retLbl)
                             generador.addExp(aux, aux, '1', '+')
                         
-                        return Return(returnTemp, Tipo.STRUCT, True)
+                        return ReturnCompilador(returnTemp, Tipo.STRUCT, True)
             except:
-                print("Error en llamda a funcion")
+                print("Error en llamada a funcion")

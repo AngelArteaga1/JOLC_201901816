@@ -56,6 +56,7 @@ class AmbitoCompilador:
         while env != None:
             if idFunc in env.functions.keys():
                 return env.functions[idFunc]
+            env = env.prev
         return None
         
     def getStruct(self, idStruct):

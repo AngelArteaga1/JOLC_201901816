@@ -1,6 +1,7 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import Tipo
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class If(Instruccion):
 
@@ -45,4 +46,25 @@ class If(Instruccion):
             self.elseSt.graph(nombreElse)
 
     def compile(self, ambito):
-        print("hola")
+        genAux = Generador()
+        generator = genAux.getInstance()
+
+        generator.addComment("Compilacion de If")
+        con = self.condicion.compile(ambito)
+
+        if con.tipo != Tipo.BOOLEAN:
+            print('Error, condicion no booleana')
+            return
+        
+        generator.putLabel(con.trueLbl)
+        
+        self.instrucciones.compile(ambito)
+
+        if self.elseSt != None:
+            exiteIf = generator.newLabel()
+            generator.addGoto(exiteIf)
+        
+        generator.putLabel(con.falseLbl)
+        if self.elseSt != None:
+            self.elseSt.compile(ambito)
+            generator.putLabel(exiteIf)
