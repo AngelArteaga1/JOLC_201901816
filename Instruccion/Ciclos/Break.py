@@ -1,6 +1,7 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Break(Instruccion):
 
@@ -17,4 +18,10 @@ class Break(Instruccion):
         Salida.num += 1
 
     def compile(self, ambito):
-        print("hola")
+        if ambito.breakLbl == '':
+            print("Break fuera de ciclo")
+            return
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        generador.addGoto(ambito.breakLbl)

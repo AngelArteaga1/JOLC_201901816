@@ -42,4 +42,4 @@ class Rango(Expresion):
         self.maximo.graph(nombreLit)
 
     def compile(self, ambito):
-        print("hola")
+        return ReturnCompilador(self, Tipo.RANGE, False)

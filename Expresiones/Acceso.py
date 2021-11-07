@@ -26,13 +26,13 @@ class Acceso(Expresion):
         Salida.graph += padre + '->' + nombreLit + ';\n'
         Salida.num += 1
 
-    def compile(self, environment):
+    def compile(self, ambito):
         genAux = Generador()
         generador = genAux.getInstance()
 
         generador.addComment("Compilacion de Acceso")
         
-        var = environment.getVar(self.id)
+        var = ambito.getVar(self.id)
         if(var == None):
             print("Error, no existe la variable")
             return ReturnCompilador(None, Tipo.NOTHING, False)

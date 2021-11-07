@@ -1,6 +1,10 @@
+from Abstracto.Expresion import Expresion
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
 from Export import Salida
+from Instruccion.Variables.Declaracion import Declaracion
+from Simbolo.Generador import Generador
+from Simbolo.AmbitoCompilador import AmbitoCompilador
 
 class For(Instruccion):
 
@@ -70,4 +74,75 @@ class For(Instruccion):
         self.instrucciones.graph(nombreInstr)
 
     def compile(self, ambito):
-        print("hola")
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        #Comentamos que comenzamos el if
+        generador.addComment("INICIO DEL FOR")
+        nuevoAmbito = AmbitoCompilador(ambito)
+
+        exp = self.expresion.compile(ambito)
+
+        continueLbl = generador.newLabel()
+        breakLbl = generador.newLabel()
+        iterateLbl = generador.newLabel()
+        #Se lo seteamos al nuevo ambito
+        nuevoAmbito.breakLbl = breakLbl
+        nuevoAmbito.continueLbl = iterateLbl
+
+        if exp.tipo == Tipo.RANGE:
+
+            #Obtenemos los valores
+            min = exp.val.minimo.compile(ambito)
+            max = exp.val.maximo.compile(ambito)
+            tmp = generador.addTemp()
+            generador.addExp(tmp,min.val,'','')
+
+            #**********AQUI YA EMPEZAMOS EL CICLO**********
+            generador.putLabel(continueLbl)
+            newVar = nuevoAmbito.saveVar(self.id, Tipo.INT, False)
+            # Obtencion de posicion de la variable
+            tempPos = newVar.pos
+            if(not newVar.isGlobal):
+                tempPos = generador.addTemp()
+                generador.addExp(tempPos, 'P', newVar.pos, "+")
+            generador.setStack(tempPos, tmp)
+
+            #Ahora ya compilamos las intrucciones
+            self.instrucciones.compile(nuevoAmbito)
+
+            generador.addGoto(iterateLbl)
+            generador.putLabel(iterateLbl)
+            generador.addExp(tmp,tmp,'1','+')
+            generador.addIf(tmp,max.val,'>',breakLbl)
+            generador.addGoto(continueLbl)
+        elif exp.tipo == Tipo.STRING:
+
+            #Obtenemos los valores
+            tmp = generador.addTemp()
+            tmpH = generador.addTemp()
+            generador.addExp(tmpH,exp.val,'','')
+            generador.getHeap(tmp,tmpH)
+
+            #**********AQUI YA EMPEZAMOS EL CICLO**********
+            generador.putLabel(continueLbl)
+            newVar = nuevoAmbito.saveVar(self.id, Tipo.CHAR, False)
+            # Obtencion de posicion de la variable
+            tempPos = newVar.pos
+            if(not newVar.isGlobal):
+                tempPos = generador.addTemp()
+                generador.addExp(tempPos, 'P', newVar.pos, "+")
+            generador.setStack(tempPos, tmp)
+
+            #Ahora ya compilamos las intrucciones
+            self.instrucciones.compile(nuevoAmbito)
+
+            generador.addGoto(iterateLbl)
+            generador.putLabel(iterateLbl)
+            generador.addExp(tmpH,tmpH,'1','+')
+            generador.getHeap(tmp,tmpH)
+            generador.addIf(tmp,'-1','==',breakLbl)
+            generador.addGoto(continueLbl)
+
+        generador.putLabel(breakLbl)
+        generador.addComment("FIN DEL FOR")

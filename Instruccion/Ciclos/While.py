@@ -1,6 +1,8 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.AmbitoCompilador import AmbitoCompilador
+from Simbolo.Generador import Generador
 
 class While(Instruccion):
 
@@ -49,5 +51,28 @@ class While(Instruccion):
         Salida.num += 1
         self.instrucciones.graph(nombreInstr)
 
+    
     def compile(self, ambito):
-        print("hola")
+        genAux = Generador()
+        generador = genAux.getInstance()
+
+        #Comentamos que comenzamos el if
+        generador.addComment("INICIO DE WHILE")
+    
+        continueLbl = generador.newLabel()
+        generador.putLabel(continueLbl)
+
+        condicion = self.condicion.compile(ambito)
+        nuevoAmbito = AmbitoCompilador(ambito)
+
+        nuevoAmbito.breakLbl = condicion.falseLbl
+        nuevoAmbito.continueLbl = continueLbl
+
+        generador.putLabel(condicion.trueLbl)
+
+        self.instrucciones.compile(nuevoAmbito)
+        generador.addGoto(continueLbl)
+
+        generador.putLabel(condicion.falseLbl)
+
+        generador.addComment("FIN DE WHILE")

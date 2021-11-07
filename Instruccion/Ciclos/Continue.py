@@ -1,5 +1,6 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
+from Simbolo.Generador import Generador
 
 class Continue(Instruccion):
 
@@ -16,4 +17,10 @@ class Continue(Instruccion):
         Salida.num += 1
 
     def compile(self, ambito):
-        print("hola")
+        if ambito.continueLbl == '':
+            print("Continue fuera de ciclo")
+            return
+        genAux = Generador()
+        generator = genAux.getInstance()
+
+        generator.addGoto(ambito.continueLbl)

@@ -95,29 +95,32 @@ class Declaracion(Instruccion):
         generador.addComment("Fin de valor de variable")
 
         # Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
-        newVar = ambito.getVar(self.id)
-        if newVar == None:
+        if self.tipoDeclaracion == TipoDeclaracion.DEFAULT:
             newVar = ambito.saveVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT), self.val.structType)
-        newVar.tipo = val.tipo
-
-        # Obtencion de posicion de la variable
-        tempPos = newVar.pos
-        if(not newVar.isGlobal):
-            tempPos = generador.addTemp()
-            generador.addExp(tempPos, 'P', newVar.pos, "+")
+        elif self.tipoDeclaracion == TipoDeclaracion.LOCAL:
+            newVar = ambito.saveLocalVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT), self.val.structType)
+        elif self.tipoDeclaracion == TipoDeclaracion.GLOBAL:
+            newVar = ambito.saveGlobalVar(self.id, val.tipo, True, self.val.structType)
         
-        if(val.tipo == Tipo.BOOLEAN):
-            tempLbl = generador.newLabel()
+        if self.val != None:
+            # Obtencion de posicion de la variable
+            tempPos = newVar.pos
+            if(not newVar.isGlobal):
+                tempPos = generador.addTemp()
+                generador.addExp(tempPos, 'P', newVar.pos, "+")
             
-            generador.putLabel(val.trueLbl)
-            generador.setStack(tempPos, "1")
-            
-            generador.addGoto(tempLbl)
+            if(val.tipo == Tipo.BOOLEAN):
+                tempLbl = generador.newLabel()
+                
+                generador.putLabel(val.trueLbl)
+                generador.setStack(tempPos, "1")
+                
+                generador.addGoto(tempLbl)
 
-            generador.putLabel(val.falseLbl)
-            generador.setStack(tempPos, "0")
+                generador.putLabel(val.falseLbl)
+                generador.setStack(tempPos, "0")
 
-            generador.putLabel(tempLbl)
-        else:
-            generador.setStack(tempPos, val.val)
-        generador.addSpace()
+                generador.putLabel(tempLbl)
+            else:
+                generador.setStack(tempPos, val.val)
+            generador.addSpace()
