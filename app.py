@@ -4,6 +4,8 @@ import json
 from Gramatica import grammar
 from Export import Salida
 from Simbolo.Ambito import *
+from Simbolo.AmbitoCompilador import AmbitoCompilador
+from Simbolo.Generador import Generador
 
 app = Flask(__name__)
 
@@ -28,6 +30,33 @@ def home():
             Salida.errores.append(Error("Error al ejecutar instrucciones", 0, 0))
         
         return { 'msg': Salida.salida, 'code': 200 }
+    except:
+        return { 'msg': 'ERROR', 'code': 500 }
+
+@app.route("/compile", methods=['POST'])
+def compile():
+    try:
+        Salida.init()
+        input = request.json['input']
+
+        f = open("exec.txt", "w")
+        f.write(input)
+        f.close()
+
+        genAux = Generador()
+        genAux.clean()
+        generador = genAux.getInstance()
+        
+        nuevoAmbito = AmbitoCompilador(None, "Global")
+        Salida.ast = grammar.parse(input)
+        try:
+            for instr in Salida.ast:
+                instr.compile(nuevoAmbito)
+        except:
+            print("Error al compilar instrucciones")
+            Salida.errores.append(Error("Error al ejecutar instrucciones", 0, 0))
+        
+        return { 'msg': generador.getCodigo(), 'code': 200 }
     except:
         return { 'msg': 'ERROR', 'code': 500 }
 

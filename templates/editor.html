@@ -59,6 +59,9 @@
                 <form class="d-flex">
                     <a class="btn btn-outline-success" id="exec"> <i class="uil-caret-right "></i> Ejecutar</a>
                 </form>
+                <form class="d-flex">
+                    <a class="btn btn-outline-info" id="compile"> <i class="uil-caret-right "></i> Compilar</a>
+                </form>
             </div>
         </div>
     </nav>
@@ -205,6 +208,23 @@
             $.ajax({
                 type: 'POST',
                 url: '/exec',
+                data: JSON.stringify({ input: code }),
+                success: function(data){
+                    salida.setValue(data.msg);
+                },
+                contentType: 'application/json',
+                dataType: 'json'
+            });
+        });
+    });
+
+    $(function(){
+        $('a#compile').on('click', function(e) {
+            var code = entrada.getValue();
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/compile',
                 data: JSON.stringify({ input: code }),
                 success: function(data){
                     salida.setValue(data.msg);
