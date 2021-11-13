@@ -23,20 +23,11 @@ class AmbitoCompilador:
         self.functions = {}
         self.structs = {}
         self.referencias = {}
-    
-    def saveVar2(self, idVar, symType, inHeap, structType = ""):
-        if idVar in self.variables.keys():
-            print("Variable ya existe")
-        else:
-            newSymbol = SimboloCompilador(idVar, symType, self.size, self.prev == None, inHeap, structType)
-            self.size += 1
-            self.variables[idVar] = newSymbol
-        return self.variables[idVar]
 
-    def saveVar(self, idVar, symType, inHeap, structType = ""):
+    def saveVar(self, idVar, symType, inHeap, structType = "", auxTipo = None):
         env = self
         esReferencia = self.getReferencia(idVar)
-        newSymbol = SimboloCompilador(idVar, symType, self.size, self.prev == None, inHeap, structType)
+        newSymbol = SimboloCompilador(idVar, symType, self.size, self.prev == None, inHeap, structType, auxTipo)
         if esReferencia:
             ambitoGlobal = self.getGlobal()
             newSymbol.isGlobal = True
@@ -48,6 +39,7 @@ class AmbitoCompilador:
                     newSymbol.tipo = symType
                     newSymbol.inHeap = inHeap
                     newSymbol.structType = structType
+                    newSymbol.auxTipo = auxTipo
                     return env.variables[idVar]
                 env = env.prev
             if idVar in env.variables.keys():
@@ -55,6 +47,7 @@ class AmbitoCompilador:
                 newSymbol.tipo = symType
                 newSymbol.inHeap = inHeap
                 newSymbol.structType = structType
+                newSymbol.auxTipo = auxTipo
                 env.variables[idVar] = newSymbol
             else:
                 newSymbol.isGlobal = self.prev == None
@@ -67,6 +60,7 @@ class AmbitoCompilador:
                     newSymbol.tipo = symType
                     newSymbol.inHeap = inHeap
                     newSymbol.structType = structType
+                    newSymbol.auxTipo = auxTipo
                     return env.variables[idVar]
                 env = env.prev
             newSymbol.isGlobal = self.prev == None
@@ -74,28 +68,30 @@ class AmbitoCompilador:
             self.size += 1
             return self.variables[idVar]
 
-    def saveLocalVar(self, idVar, symType, inHeap, structType = ""):
-        newSymbol = SimboloCompilador(idVar, symType, self.size, self.prev == None, inHeap, structType)
+    def saveLocalVar(self, idVar, symType, inHeap, structType = "", auxTipo = None):
+        newSymbol = SimboloCompilador(idVar, symType, self.size, self.prev == None, inHeap, structType,auxTipo)
         if not idVar in self.variables.keys():
             newSymbol = self.variables[idVar]
             newSymbol.tipo = symType
             newSymbol.inHeap = inHeap
             newSymbol.structType = structType
+            newSymbol.auxTipo = auxTipo
             return self.variables[idVar]
         else:
             self.size += 1
             self.variables[idVar] = newSymbol
             return self.variables[idVar]
 
-    def saveGlobalVar(self, idVar, symType, inHeap, structType = ""):
+    def saveGlobalVar(self, idVar, symType, inHeap, structType = "", auxTipo = None):
         self.referencias[idVar] = None
         envGlobal = self.getGlobal()
-        newSymbol = SimboloCompilador(idVar, symType, envGlobal.size, envGlobal.prev == None, inHeap, structType)
+        newSymbol = SimboloCompilador(idVar, symType, envGlobal.size, envGlobal.prev == None, inHeap, structType, auxTipo)
         if idVar in envGlobal.variables.keys():
             newSymbol = envGlobal.variables[idVar]
             newSymbol.tipo = symType
             newSymbol.inHeap = inHeap
             newSymbol.structType = structType
+            newSymbol.auxTipo = auxTipo
             return envGlobal.variables[idVar]
         else:
             envGlobal.size += 1

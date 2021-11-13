@@ -1,93 +1,30 @@
-
-println("");
-println("=======================================================================");
-println("=================================WHILE=================================");
-println("=======================================================================");
-
-index = 0::Int64;
-
-while (index >= 0) 
-
-    if (index == 0) 
-        global index = index + 100;
-    elseif (index > 50) 
-        global index = index / 2 - 25;
-    else 
-        global index = (index / 2) - 1;
-    end;
-
-    println(index);
+pepe = ["Lavanderia","Persona","3"];
+println(pepe);
+println(pepe[1]);
+println(pepe[2]);
+println(pepe[3]);
+println("Ahora con un for");
+for i in 1:length(pepe)
+    println(pepe[i]);
 end;
 
-println("");
-println("=======================================================================");
-println("================================WHILE-2================================");
-println("=======================================================================");
+pepe[2] = "Angelito";
+println(pepe);
 
-index = -2;
-index = index + 1;
+#dimensional = [[1,2,3],[4,5,6],[7,8,9]];
+#println(dimensional);
 
-while (index != 12)
-    global index = index + 1;
-    if (index == 0 || index == 1 || index == 11 || index == 12) 
-        println("*********************************************************************************************************");
-    elseif (index == 2) 
-        println("**********  ***************  ******                 ******                 ******              **********");
-    elseif (index >= 3 && index <= 5) 
-        println("**********  ***************  ******  *********************  *************  ******  **********************");
-    elseif (index == 6) 
-        println("**********  ***************  ******                 ******                 ******  **********************");
-    elseif (index >= 7 && index <= 9) 
-        println("**********  ***************  ********************   ******  *************  ******  **********************");
-    elseif (index == 10) 
-        println("**********                   ******                 ******  *************  ******              **********");
-    end;
+function swap(arreglo::Vector{String})
+    temp = arreglo[3];
+    arreglo[3] = arreglo[1];
+    arreglo[1] = temp;
+    println("Primera posicion: ", arreglo[1]);
 end;
 
-println("");
-println("=======================================================================");
-println("=============================TRANSFERENCIA=============================");
-println("=======================================================================");
-
-a = -1;
-while (a < 5)
-    global a = a + 1;
-    if a == 3
-        print("a");
-        continue;
-    elseif a == 4
-        println("b");
-        break;
-    end;
-
-    print("El valor de a es: ", a, ", ");
+arreglito = ["uno","dos","tres"];
+for i in arreglito
+    println(i);
 end;
 
-println("Se debió imprimir");
-
-println("");
-println("=======================================================================");
-println("==================================FOR==================================");
-println("=======================================================================");
-
-for i in 0:9
-
-    output = "";
-    for j in 0:(10 - i)
-        output = output * " ";
-    end;
-
-    for k in 0:i 
-        output = output * "* ";
-    end;
-    println(output);
-
-end;
-
-println("");
-println("=======================================================================");
-println("=================================FOR-4=================================");
-println("=======================================================================");
-for letra in "Calificacion de Intermedio"
-    println(letra);
-end;
+swap(arreglito);
+println(arreglito);

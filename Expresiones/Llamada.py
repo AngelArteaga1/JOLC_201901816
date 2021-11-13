@@ -342,12 +342,12 @@ class Llamada(Expresion):
                 if func != None:
                     paramValues = []
 
-                    size = ambito.size
+                    size = generador.saveT(ambito)
                     for param in self.parametros:
                         paramValues.append(param.compile(ambito))
                     temp = generador.addTemp()
 
-                    generador.addExp(temp, 'P', size+1, '+')
+                    generador.addExp(temp, 'P', ambito.size+1, '+')
                     aux = 0
                     for param in paramValues:
                         aux += 1
@@ -355,10 +355,11 @@ class Llamada(Expresion):
                         if aux != len(paramValues):
                             generador.addExp(temp, temp, '1', '+')
                     
-                    generador.newEnv(size)
+                    generador.newEnv(ambito.size)
                     generador.callFun(self.id)
                     generador.getStack(temp, 'P')
-                    generador.retEnv(size)
+                    generador.retEnv(ambito.size)
+                    generador.recoverT(ambito, size)
                     
                     # TODO: Verificar tipo de la funcion. Boolean es distinto
                     if func.tipo != None:

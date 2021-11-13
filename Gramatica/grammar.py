@@ -62,6 +62,7 @@ rw = {
     "PRINT" : "PRINT",
 
     #TIPOS
+    "VECTOR" : "VECTOR",
     "NOTHING" : "NOTHING",
     "INT64" : "INT64",
     "FLOAT64" : "FLOAT64",
@@ -93,6 +94,8 @@ tokens = [
     "PARCIERRA",
     "CORABRE",
     "CORCIERRA",
+    "LLAABRE",
+    "LLACIERRA",
 
     # ARITHMETIC SYMBOLS
     "MAS",
@@ -129,6 +132,8 @@ t_PARABRE               = r'\('
 t_PARCIERRA             = r'\)'
 t_CORABRE               = r'\['
 t_CORCIERRA             = r'\]'
+t_LLAABRE               = r'\{'
+t_LLACIERRA             = r'\}'
 
 # ARITHMETIC SYMBOLS
 t_MAS                   = r'\+'
@@ -581,7 +586,8 @@ def p_tipoST(t):
               | BOOL
               | CHAR
               | STRING
-              | ID'''
+              | ID
+              | VECTOR LLAABRE tipoST LLACIERRA'''
     if t.slice[1].type == "INT64":
         t[0] = Tipo.INT
     elif t.slice[1].type == "FLOAT64":
@@ -594,6 +600,11 @@ def p_tipoST(t):
         t[0] = Tipo.STRING
     elif t.slice[1].type == "ID":
         t[0] = t[1]
+    elif t.slice[1].type == "VECTOR":
+        arreglito = []
+        arreglito.append(Tipo.ARRAY)
+        arreglito.append(t[3])
+        t[0] = arreglito
 
 def p_error(t):
     print(t)

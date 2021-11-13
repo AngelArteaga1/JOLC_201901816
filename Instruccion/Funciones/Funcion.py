@@ -53,7 +53,14 @@ class Funcion(Instruccion):
         nuevoAmbito.size = 1
 
         for param in self.parametros:
-            nuevoAmbito.saveVar(param.id, param.tipo, (param.tipo == Tipo.STRING or param.tipo == Tipo.STRUCT))
+            tipo = None
+            tipoAux = None
+            if isinstance(param.tipo, list):
+                tipo = param.tipo[0]
+                tipoAux = param.tipo[1]
+            else:
+                tipo = param.tipo
+            nuevoAmbito.saveVar(param.id, tipo, (tipo == Tipo.STRING or tipo == Tipo.STRUCT or tipo == Tipo.ARRAY),'',tipoAux)
         
         generador.addBeginFunc(self.id)
 
@@ -66,3 +73,4 @@ class Funcion(Instruccion):
         generador.addGoto(returnLbl)
         generador.putLabel(returnLbl)
         generador.addEndFunc()
+        generador.LeaveAllT()

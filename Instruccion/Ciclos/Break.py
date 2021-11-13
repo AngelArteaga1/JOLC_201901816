@@ -18,10 +18,10 @@ class Break(Instruccion):
         Salida.num += 1
 
     def compile(self, ambito):
-        if ambito.breakLbl == '':
-            print("Break fuera de ciclo")
-            return
         genAux = Generador()
         generador = genAux.getInstance()
+        if ambito.breakLbl == '':
+            generador.addError("Error Semantico: break fuera de funcion, linea: " + str(self.linea) + " columna: " + str(self.columna))
+            return
 
         generador.addGoto(ambito.breakLbl)

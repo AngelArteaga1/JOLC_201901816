@@ -50,7 +50,7 @@ class Acceso(Expresion):
         if var.tipo != Tipo.BOOLEAN:
             generador.addComment("Fin compilacion acceso")
             generador.addSpace()
-            return Return(temp, var.tipo, True)
+            return ReturnCompilador(temp, var.tipo, True, var.auxTipo)
         if self.trueLbl == '':
             self.trueLbl = generador.newLabel()
         if self.falseLbl == '':
@@ -62,7 +62,7 @@ class Acceso(Expresion):
         generador.addComment("Fin compilacion acceso")
         generador.addSpace()
 
-        ret = Return(None, Tipo.BOOLEAN, False)
+        ret = ReturnCompilador(None, Tipo.BOOLEAN, False, var.auxTipo)
         ret.trueLbl = self.trueLbl
         ret.falseLbl = self.falseLbl
         return ret

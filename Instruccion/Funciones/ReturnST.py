@@ -26,28 +26,29 @@ class ReturnST(Expresion):
         self.expresion.graph(nombreLit)
 
     def compile(self, ambito):
+        genAux = Generador()
+        generador = genAux.getInstance()
         if(ambito.returnLbl == ''):
             print("Return fuera de funcion")
+            generador.addError("Error Semantico: return fuera de funcion, linea: " + str(self.linea) + " columna: " + str(self.columna))
             return
-        genAux = Generador()
-        generator = genAux.getInstance()
 
         value = self.expresion.compile(ambito)
         if(value.tipo == Tipo.NOTHING):
-            generator.setStack('P', '0')
-            generator.addGoto(ambito.returnLbl)
+            generador.setStack('P', '0')
+            generador.addGoto(ambito.returnLbl)
             return
         if(value.tipo == Tipo.BOOLEAN):
-            tempLbl = generator.newLabel()
+            tempLbl = generador.newLabel()
             
-            generator.putLabel(value.trueLbl)
-            generator.setStack('P', '1')
-            generator.addGoto(tempLbl)
+            generador.putLabel(value.trueLbl)
+            generador.setStack('P', '1')
+            generador.addGoto(tempLbl)
 
-            generator.putLabel(value.falseLbl)
-            generator.setStack('P', '0')
+            generador.putLabel(value.falseLbl)
+            generador.setStack('P', '0')
 
-            generator.putLabel(tempLbl)
+            generador.putLabel(tempLbl)
         else:
-            generator.setStack('P', value.val)
-        generator.addGoto(ambito.returnLbl)
+            generador.setStack('P', value.val)
+        generador.addGoto(ambito.returnLbl)

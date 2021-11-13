@@ -1,6 +1,7 @@
 from Abstracto.Expresion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class AccesoArray(Expresion):
 
@@ -60,4 +61,25 @@ class AccesoArray(Expresion):
         self.expresion.graph(nombreIndice)
 
     def compile(self, ambito):
-        print("hola")
+        genAux = Generador()
+        generador = genAux.getInstance()
+        generador.addComment("Compilacion de Acceso de Arreglo")
+        value = self.id.compile(ambito)
+        pos = self.expresion.compile(ambito)
+        
+        #Obtenemos la posicion de inicio del arreglo
+        TempP = generador.addTemp()
+        generador.addExp(TempP,value.val,'','')
+        #Obtenemos la posicion
+        TempPos = generador.addTemp()
+        generador.addExp(TempPos,pos.val,'','')
+        generador.addExp(TempPos,TempPos,'1','-')
+        
+        #Ahora Le sumamos a la posicion de inicio la otra posicion
+        generador.addExp(TempP,TempP,TempPos,'+')
+        
+        #Ahora regresamos lo que hay en el heap de esa posicion
+        resultado = generador.addTemp()
+        generador.getHeap(resultado,TempP)
+        generador.addComment("Fin de Compilacion de Acceso de Arreglo")
+        return ReturnCompilador(resultado,value.auxTipo,True)

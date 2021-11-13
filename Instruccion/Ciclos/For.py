@@ -143,6 +143,33 @@ class For(Instruccion):
             generador.getHeap(tmp,tmpH)
             generador.addIf(tmp,'-1','==',breakLbl)
             generador.addGoto(continueLbl)
+        elif exp.tipo == Tipo.ARRAY:
+
+            #Obtenemos los valores
+            tmp = generador.addTemp()
+            tmpH = generador.addTemp()
+            generador.addExp(tmpH,exp.val,'','')
+            generador.getHeap(tmp,tmpH)
+
+            #**********AQUI YA EMPEZAMOS EL CICLO**********
+            generador.putLabel(continueLbl)
+            newVar = nuevoAmbito.saveVar(self.id, exp.auxTipo, True)
+            # Obtencion de posicion de la variable
+            tempPos = newVar.pos
+            if(not newVar.isGlobal):
+                tempPos = generador.addTemp()
+                generador.addExp(tempPos, 'P', newVar.pos, "+")
+            generador.setStack(tempPos, tmp)
+
+            #Ahora ya compilamos las intrucciones
+            self.instrucciones.compile(nuevoAmbito)
+
+            generador.addGoto(iterateLbl)
+            generador.putLabel(iterateLbl)
+            generador.addExp(tmpH,tmpH,'1','+')
+            generador.getHeap(tmp,tmpH)
+            generador.addIf(tmp,'-1','==',breakLbl)
+            generador.addGoto(continueLbl)
 
         generador.putLabel(breakLbl)
         generador.addComment("FIN DEL FOR")

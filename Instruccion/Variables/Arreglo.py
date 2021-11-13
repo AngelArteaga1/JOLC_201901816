@@ -1,6 +1,7 @@
 from Abstracto.Instruccion import *
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 class Arreglo(Instruccion):
 
@@ -65,4 +66,29 @@ class Arreglo(Instruccion):
         self.valor.graph(nombreLit)
 
     def compile(self, ambito):
-        print("hola")
+        #Ahora la recursividad
+        copiaListita = self.listaIndice[:]
+        copiaArreglo = self.arreglo
+        valor = self.valor.compile(ambito)
+        self.compileArreglo(ambito, copiaArreglo , copiaListita, valor)
+    
+    def compileArreglo(self, ambito, arreglito, listita, valor):
+        genAux = Generador()
+        generador = genAux.getInstance()
+        
+        arreglito = arreglito.compile(ambito)
+        pos = listita.pop(0).compile(ambito)
+        
+        #Obtenemos la posicion de inicio del arreglo
+        TempP = generador.addTemp()
+        generador.addExp(TempP,arreglito.val,'','')
+        #Obtenemos la posicion
+        TempPos = generador.addTemp()
+        generador.addExp(TempPos,pos.val,'','')
+        generador.addExp(TempPos,TempPos,'1','-')
+        
+        #Ahora Le sumamos a la posicion de inicio la otra posicion
+        generador.addExp(TempP,TempP,TempPos,'+')
+        
+        #Ahora seteamos el heap con el nuevo valor
+        generador.setHeap(TempP,valor.val)

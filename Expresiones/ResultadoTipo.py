@@ -1,7 +1,10 @@
 from Abstracto.Return import *
 from Export import Salida
+from Simbolo.Generador import Generador
 
 def getTipo(leftType, rightType, Operador, linea, columna):
+    genAux = Generador()
+    generador = genAux.getInstance()
     if Operador == OpAritmetico.PLUS:
         if rightType == Tipo.INT and leftType == Tipo.INT:
             return Tipo.INT
@@ -13,6 +16,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.FLOAT
         else:
             print("Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna)
             Salida.errores.append(Error("Error Semantico: no es posible realizar la suma de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -27,6 +31,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.FLOAT
         else:
             print("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -43,6 +48,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.STRING
         else:
             print("Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la multiplicación de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -57,6 +63,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.FLOAT
         else:
             print("Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la división de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -73,6 +80,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.STRING
         else:
             print("Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la potencia de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -87,6 +95,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.FLOAT
         else:
             print("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la resta de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -103,6 +112,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.BOOLEAN
         else:
             print("Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '>' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -119,6 +129,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.BOOLEAN
         else:
             print("Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '<' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -135,6 +146,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.BOOLEAN
         else:
             print("Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '>=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING
@@ -151,6 +163,7 @@ def getTipo(leftType, rightType, Operador, linea, columna):
             return Tipo.BOOLEAN
         else:
             print("Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
+            generador.addError("Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna))
             Salida.salida += "Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "', linea: " + str(linea) + " columna: " + str(columna) + "\n"
             Salida.errores.append(Error("Error Semantico: no es posible realizar la comparacion '<=' de tipo '" + str(rightType) + "' y '" + str(leftType) + "'", linea, columna))
             return Tipo.NOTHING

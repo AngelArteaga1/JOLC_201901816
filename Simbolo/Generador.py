@@ -15,6 +15,7 @@ class Generador:
         self.enNativas = False
         # Lista de Temporales
         self.tmps = []
+        self.tmpsR = {}
         # Lista de Imports
         self.fmt = False
         self.math = False
@@ -92,6 +93,14 @@ class Generador:
     def addSpace(self):
         self.codeIn("\n")
 
+    #################
+    # Errores
+    #################
+    def addError(self, cadenita):
+        for i in cadenita:
+            self.addPrint('c',ord(i))
+        self.addPrint("c", 10)
+
     ########################
     # Manejo de Temporales
     ########################
@@ -99,7 +108,49 @@ class Generador:
         temp = f't{self.contTmp}'
         self.contTmp += 1
         self.tmps.append(temp)
+        self.tmpsR[temp] = temp
         return temp
+
+    def LeaveAllT(self):
+        self.tmpsR = {}
+
+    def LeaveT(self, temp):
+        if(temp in self.tmpsR):
+            self.tmpsR.pop(temp, None)
+
+    def saveT(self, env):
+        size = 0
+        if len(self.tmpsR) > 0:
+            temp = self.addTemp()
+            self.LeaveT(temp)
+            # Aqui empezamos a guardar los temporales
+            self.addExp(temp, 'P', env.size, '+')
+            for value in self.tmpsR:
+                size += 1
+                self.setStack(temp, value, False)
+                if size != len(self.tmpsR):
+                    self.addExp(temp, temp, '1', '+')
+            # Aqui terminamos de guardar los temporales
+        ptr = env.size
+        env.size = ptr + size
+        return ptr
+    
+    def recoverT(self, env, pos):
+        if len(self.tmpsR) > 0:
+            temp = self.addTemp()
+            self.LeaveT(temp)
+
+            size = 0
+
+            # Recuperacion de temporales
+            self.addExp(temp, 'P', pos, '+')
+            for value in self.tmpsR:
+                size += 1
+                self.getStack(value, temp)
+                if size != len(self.tmpsR):
+                    self.addExp(temp, temp, '1', '+')
+            env.size = pos
+            # Fin Recuperacion de temporales
 
     #####################
     # Manejo de Labels
@@ -122,12 +173,16 @@ class Generador:
     # IF
     ###################
     def addIf(self, left, right, op, label):
+        self.LeaveT(left)
+        self.LeaveT(right)
         self.codeIn(f'if {left} {op} {right} {{goto {label};}}\n')
 
     ###################
     # EXPRESIONES
     ###################
     def addExp(self, result, left, right, op):
+        self.LeaveT(left)
+        self.LeaveT(right)
         self.codeIn(f'{result}={left}{op}{right};\n')
 
     def addExpMod(self, result, left, right):
@@ -149,10 +204,14 @@ class Generador:
     ###############
     # STACK
     ###############
-    def setStack(self, pos, value):
+    def setStack(self, pos, value, Leave = True):
+        self.LeaveT(pos)
+        if Leave:
+            self.LeaveT(value)
         self.codeIn(f'stack[int({pos})]={value};\n')
     
     def getStack(self, place, pos):
+        self.LeaveT(pos)
         self.codeIn(f'{place}=stack[int({pos})];\n')
 
     #############
@@ -171,9 +230,12 @@ class Generador:
     # HEAP
     ###############
     def setHeap(self, pos, value):
+        self.LeaveT(pos)
+        self.LeaveT(value)
         self.codeIn(f'heap[int({pos})]={value};\n')
 
     def getHeap(self, place, pos):
+        self.LeaveT(pos)
         self.codeIn(f'{place}=heap[int({pos})];\n')
 
     def nextHeap(self):
@@ -181,9 +243,11 @@ class Generador:
 
     # INSTRUCCIONES
     def addPrint(self, type, value):
+        self.LeaveT(value)
         self.codeIn(f'fmt.Printf("%{type}", int({value}));\n')
 
     def addPrintFloat(self, type, value):
+        self.LeaveT(value)
         self.codeIn(f'fmt.Printf("%{type}", {value});\n')
     
     def printTrue(self):
@@ -217,6 +281,7 @@ class Generador:
     def addMath(self):
         self.imports += '\t"math";\n'
         self.math = True
+
 
     ##############
     # NATIVES
@@ -261,6 +326,9 @@ class Generador:
         self.putLabel(returnLbl)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempP)
+        self.LeaveT(tempH)
+        self.LeaveT(tempC)
     
     def fPotencia(self):
         if(self.potencia):
@@ -306,6 +374,9 @@ class Generador:
         self.putLabel(L3)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(t0)
+        self.LeaveT(t1)
+        self.LeaveT(t2)
 
     def fPotenciaStringLeft(self):
         if(self.potenciaLeft):
@@ -379,6 +450,12 @@ class Generador:
         self.setStack('P', retTemp)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(retTemp)
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
+        self.LeaveT(tempE)
+        self.LeaveT(tempP)
+        self.LeaveT(Temp)
 
     def fConcatenar(self):
         if(self.concatenar):
@@ -456,6 +533,10 @@ class Generador:
         self.setStack('P', retTemp)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(retTemp)
+        self.LeaveT(tempH)
+        self.LeaveT(tempC)
+        self.LeaveT(tempP)
 
     def fCompararIgual(self):
         if(self.compararIgual):
@@ -508,6 +589,10 @@ class Generador:
         self.putLabel(falseLbl)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(retTemp)
+        self.LeaveT(tempP)
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
 
     def fUppercase(self):
         if(self.uppercase):
@@ -561,6 +646,10 @@ class Generador:
         self.setStack('P', tempR)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
+        self.LeaveT(tempP)
+        self.LeaveT(tempR)
 
     def fLowercase(self):
         if(self.lowercase):
@@ -614,6 +703,10 @@ class Generador:
         self.setStack('P', tempR)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
+        self.LeaveT(tempP)
+        self.LeaveT(tempR)
 
     def fParseToInt(self):
         if(self.parseToInt):
@@ -648,7 +741,15 @@ class Generador:
 
         # Temporal para comparar
         tempC = self.addTemp()
-
+        self.getHeap(tempC, tempH)
+        
+        #Comprobamos si es negativo el numero
+        esNegativo = self.addTemp()
+        self.addExp(esNegativo,'0','','')
+        self.addIf(tempC, '45', '!=', ciclo1)
+        self.addExp(esNegativo,'1','','')
+        self.addExp(tempH, tempH, '1', '+')
+        
         self.putLabel(ciclo1)
 
         self.getHeap(tempC, tempH)
@@ -673,6 +774,9 @@ class Generador:
         self.addExp(tempP, 'P', '1', '+')
 
         self.getStack(tempH, tempP)
+        
+        self.addIf(esNegativo, '0', '==', ciclo2)
+        self.addExp(tempH, tempH, '1', '+')
 
         #Empezamos el segundo ciclo
         self.putLabel(ciclo2)
@@ -695,9 +799,23 @@ class Generador:
         self.addGoto(ciclo2)
 
         self.putLabel(returnLbl)
+        
+        #Si es negativo lo multiplicamos
+        seguir = self.newLabel()
+        self.addIf(esNegativo, '0', '==', seguir)
+        self.addExp(resultado,'0',resultado,'-')
+        
+        self.putLabel(seguir)
         self.setStack('P', resultado)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempH)
+        self.LeaveT(tempC)
+        self.LeaveT(tempP)
+        self.LeaveT(mult)
+        self.LeaveT(resultado)
+        self.LeaveT(tmp)
+        self.LeaveT(esNegativo)
 
     def fParseToFloat(self):
         if(self.parseToFloat):
@@ -737,6 +855,14 @@ class Generador:
 
         # Temporal para comparar
         tempC = self.addTemp()
+        self.getHeap(tempC, tempH)
+
+        #Comprobamos si es negativo el numero
+        esNegativo = self.addTemp()
+        self.addExp(esNegativo,'0','','')
+        self.addIf(tempC, '45', '!=', ciclo1)
+        self.addExp(esNegativo,'1','','')
+        self.addExp(tempH, tempH, '1', '+')
 
         self.putLabel(ciclo1)
 
@@ -762,6 +888,9 @@ class Generador:
         self.addExp(tempP, 'P', '1', '+')
 
         self.getStack(tempH, tempP)
+        
+        self.addIf(esNegativo, '0', '==', ciclo2)
+        self.addExp(tempH, tempH, '1', '+')
 
         #Empezamos el segundo ciclo
         self.putLabel(ciclo2)
@@ -794,9 +923,9 @@ class Generador:
         #Aqui empezamos las operaciones de cada iteracion
         self.addExp(div,div,'10','/')
         self.addExp(tempC,tempC,'48','-')
-        tmp = self.addTemp()
-        self.addExp(tmp,tempC,div,'*')
-        self.addExp(resultado,resultado,tmp,'+')
+        tmp2 = self.addTemp()
+        self.addExp(tmp2,tempC,div,'*')
+        self.addExp(resultado,resultado,tmp2,'+')
         
         #Aqui iteramos
         self.addExp(tempH, tempH, '1', '+')
@@ -805,9 +934,24 @@ class Generador:
         
 
         self.putLabel(returnLbl)
+        #Si es negativo lo multiplicamos
+        seguir = self.newLabel()
+        self.addIf(esNegativo, '0', '==', seguir)
+        self.addExp(resultado,'0',resultado,'-')
+        
+        self.putLabel(seguir)
         self.setStack('P', resultado)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
+        self.LeaveT(tempP)
+        self.LeaveT(tmp)
+        self.LeaveT(tmp2)
+        self.LeaveT(resultado)
+        self.LeaveT(esNegativo)
+        self.LeaveT(mult)
+        self.LeaveT(div)
 
     def fIntToString(self):
         if(self.intToString):
@@ -829,16 +973,28 @@ class Generador:
         # Temporal puntero a Stack
         tempP = self.addTemp()
         self.addExp(tempP, 'P', '1', '+')
+        
+        #Variable resultado
+        resultado = self.addTemp()
+        self.addExp(resultado,'H','','')
 
         # Variable del numero
         numero = self.addTemp()
         self.getStack(numero, tempP)
+        #Verificamos si el numero es negativo
+        seguir = self.newLabel()
+        self.addIf(numero,'0','>',seguir)
+        self.addExp(numero,'0',numero,'-')
+        self.setHeap('H',45)
+        self.nextHeap()
+        #Ponemos el label para seguir
+        self.putLabel(seguir)
         # Temporal del numero 
         TmpNumero = self.addTemp()
-        self.getStack(TmpNumero, tempP)
+        self.addExp(TmpNumero,numero,'','')
         # Temporal del numero 2
         TmpNumero2 = self.addTemp()
-        self.getStack(TmpNumero2, tempP)
+        self.addExp(TmpNumero2,numero,'','')
         # Caracter del numero
         caracter = self.addTemp()
         self.addExp(caracter,'0','','')
@@ -863,9 +1019,6 @@ class Generador:
         #Seguimos despues de obtener el multiplicador y reseteamos
         self.putLabel(siguiente)
         self.addExp(mult,mult,'10','/')
-        #Variable resultado
-        resultado = self.addTemp()
-        self.addExp(resultado,'H','','')
 
         #Empezamos el segundo ciclo
         self.putLabel(ciclo2)
@@ -892,6 +1045,13 @@ class Generador:
         self.setStack('P', resultado)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempP)
+        self.LeaveT(numero)
+        self.LeaveT(TmpNumero)
+        self.LeaveT(TmpNumero2)
+        self.LeaveT(mult)
+        self.LeaveT(caracter)
+        self.LeaveT(resultado)
 
     def fFloatToString(self):
         if(self.floatToString):
@@ -915,16 +1075,28 @@ class Generador:
         # Temporal puntero a Stack
         tempP = self.addTemp()
         self.addExp(tempP, 'P', '1', '+')
+        
+        #Variable resultado
+        resultado = self.addTemp()
+        self.addExp(resultado,'H','','')
 
         # Variable del numero
         numero = self.addTemp()
         self.getStack(numero, tempP)
+        #Verificamos si el numero es negativo
+        seguir = self.newLabel()
+        self.addIf(numero,'0','>',seguir)
+        self.addExp(numero,'0',numero,'-')
+        self.setHeap('H',45)
+        self.nextHeap()
+        #Ponemos el label para seguir
+        self.putLabel(seguir)
         # Temporal del numero 
         TmpNumero = self.addTemp()
-        self.getStack(TmpNumero, tempP)
+        self.addExp(TmpNumero,numero,'','')
         # Temporal del numero 2
         TmpNumero2 = self.addTemp()
-        self.getStack(TmpNumero2, tempP)
+        self.addExp(TmpNumero2,numero,'','')
         # Caracter del numero
         caracter = self.addTemp()
         self.addExp(caracter,'0','','')
@@ -949,9 +1121,6 @@ class Generador:
         #Seguimos despues de obtener el multiplicador y reseteamos
         self.putLabel(siguiente)
         self.addExp(mult,mult,'10','/')
-        #Variable resultado
-        resultado = self.addTemp()
-        self.addExp(resultado,'H','','')
 
         #Empezamos el segundo ciclo
         self.putLabel(ciclo2)
@@ -1004,6 +1173,13 @@ class Generador:
         self.setStack('P', resultado)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempP)
+        self.LeaveT(TmpNumero)
+        self.LeaveT(TmpNumero2)
+        self.LeaveT(numero)
+        self.LeaveT(caracter)
+        self.LeaveT(mult)
+        self.LeaveT(resultado)
 
     def fCharToString(self):
         if(self.charToString):
@@ -1042,6 +1218,10 @@ class Generador:
 
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempH)
+        self.LeaveT(tempP)
+        self.LeaveT(tmp)
+        self.LeaveT(resultado)
 
     def fLength(self):
         if(self.length):
@@ -1086,3 +1266,7 @@ class Generador:
         self.setStack('P', result)
         self.addEndFunc()
         self.enNativas = False
+        self.LeaveT(tempC)
+        self.LeaveT(tempH)
+        self.LeaveT(tempP)
+        self.LeaveT(result)

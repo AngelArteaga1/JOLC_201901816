@@ -76,6 +76,8 @@ class Aritmetica(Expresion):
         temp = generador.addTemp()
         op = ''
         resultadoTipo = getTipo(leftValue.tipo, rightValue.tipo, self.tipo, self.linea, self.columna)
+        if resultadoTipo == Tipo.NOTHING:
+            ReturnCompilador('0', resultadoTipo, False)
         if(self.tipo == OpAritmetico.PLUS):
             op = '+'
         elif(self.tipo == OpAritmetico.MINUS):
@@ -103,7 +105,22 @@ class Aritmetica(Expresion):
             else:
                 op = '*'
         elif(self.tipo == OpAritmetico.DIV):
-            op = '/' 
+            op = '/'
+            errorLbl = generador.newLabel()
+            returnLbl = generador.newLabel()
+            tempR = generador.addTemp()
+            generador.addExp(tempR,rightValue.val,'','')
+            generador.addIf(tempR,'0','==',errorLbl)
+            generador.addExp(temp, leftValue.val, tempR, op)
+            generador.addGoto(returnLbl)
+            
+            generador.putLabel(errorLbl)
+            generador.addExp(temp,'0','','')
+            generador.addError("Error Semantico: No es posible dividir entre 0, linea: " + str(self.linea) + " columna: " + str(self.columna))
+            
+            generador.putLabel(returnLbl)
+            return ReturnCompilador(temp, resultadoTipo, True)
+            
         elif(self.tipo == OpAritmetico.MOD):
             if not generador.math:
                 generador.addMath()

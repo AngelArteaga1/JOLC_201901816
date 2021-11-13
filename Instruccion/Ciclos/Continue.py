@@ -17,10 +17,10 @@ class Continue(Instruccion):
         Salida.num += 1
 
     def compile(self, ambito):
-        if ambito.continueLbl == '':
-            print("Continue fuera de ciclo")
-            return
         genAux = Generador()
-        generator = genAux.getInstance()
+        generador = genAux.getInstance()
+        if ambito.continueLbl == '':
+            generador.addError("Error Semantico: continue fuera de funcion, linea: " + str(self.linea) + " columna: " + str(self.columna))
+            return
 
-        generator.addGoto(ambito.continueLbl)
+        generador.addGoto(ambito.continueLbl)

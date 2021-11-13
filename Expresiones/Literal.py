@@ -77,6 +77,27 @@ class Literal(Expresion):
             generador.nextHeap()
 
             return ReturnCompilador(retTemp, Tipo.STRING, True)
+        elif self.tipo == Tipo.ARRAY:
+            tempList = []
+            tipoAux = None
+
+
+            for value in self.val:
+                val = value.compile(ambito)
+                tipoAux = val.tipo
+                tempList.append(val)
+
+            retTemp = generador.addTemp()
+            generador.addExp(retTemp, 'H', '', '')
+            
+            for value in tempList:
+                generador.setHeap('H', value.val)   # heap[H] = NUM;
+                generador.nextHeap()                # H = H + 1;
+
+            generador.setHeap('H', '-1')            # FIN DE CADENA
+            generador.nextHeap()
+            
+            return ReturnCompilador(retTemp, Tipo.ARRAY, True, tipoAux)
         elif self.tipo == Tipo.NOTHING:
             return ReturnCompilador('', Tipo.NOTHING, False)
         else:

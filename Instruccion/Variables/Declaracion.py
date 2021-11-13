@@ -96,11 +96,11 @@ class Declaracion(Instruccion):
 
         # Guardado y obtencion de variable. Esta tiene la posicion, lo que nos sirve para asignarlo en el heap
         if self.tipoDeclaracion == TipoDeclaracion.DEFAULT:
-            newVar = ambito.saveVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT), self.val.structType)
+            newVar = ambito.saveVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT or val.tipo == Tipo.ARRAY), self.val.structType, val.auxTipo)
         elif self.tipoDeclaracion == TipoDeclaracion.LOCAL:
-            newVar = ambito.saveLocalVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT), self.val.structType)
+            newVar = ambito.saveLocalVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT or val.tipo == Tipo.ARRAY), self.val.structType, val.auxTipo)
         elif self.tipoDeclaracion == TipoDeclaracion.GLOBAL:
-            newVar = ambito.saveGlobalVar(self.id, val.tipo, True, self.val.structType)
+            newVar = ambito.saveGlobalVar(self.id, val.tipo, (val.tipo == Tipo.STRING or val.tipo == Tipo.STRUCT or val.tipo == Tipo.ARRAY), self.val.structType, val.auxTipo)
         
         if self.val != None:
             # Obtencion de posicion de la variable
